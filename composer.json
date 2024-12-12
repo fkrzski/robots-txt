@@ -1,0 +1,88 @@
+{
+    "name": "fkrzski/robots-txt",
+    "description": "A modern, fluent PHP package for managing robots.txt rules with type safety and great developer experience",
+    "version": "0.1-BETA",
+    "type": "library",
+    "keywords": [
+        "robots.txt",
+        "crawler",
+        "seo",
+        "web-crawler",
+        "robots",
+        "php8"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fkrzski",
+            "email": "filip.krzyzanowski@protonmail.com",
+            "role": "Developer",
+            "homepage": "https://github.com/fkrzski"
+        }
+    ],
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/fkrzski"
+        }
+    ],
+    "support": {
+        "email": "filip.krzyzanowski@protonmail.com",
+        "issues": "https://github.com/fkrzski/robots-txt/issues",
+        "source": "https://github.com/fkrzski/robots-txt"
+    },
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "phpstan/phpstan": "^1.0",
+        "rector/rector": "^1.0",
+        "vimeo/psalm": "^6.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fkrzski\\RobotsTxt\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fkrzski\\RobotsTxt\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "test:coverage": "pest --coverage",
+        "test:types": "pest --type-coverage",
+        "test:mutation": "pest --mutate --covered-only --min=85",
+        "test:all": [
+            "@test:types",
+            "@test:coverage",
+            "@test:mutation"
+        ],
+        "cs:check": "php-cs-fixer fix --dry-run",
+        "cs:fix": "php-cs-fixer fix",
+        "analyse": [
+            "phpstan analyse",
+            "psalm --show-info=true"
+        ],
+        "rector:check": "rector process --dry-run",
+        "rector:fix": "rector process",
+        "ci": [
+            "@test:all",
+            "@analyse",
+            "@cs:check",
+            "@rector:check"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
