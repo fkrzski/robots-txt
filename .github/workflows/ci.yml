@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,7 +13,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Validate composer
+    name: Validate composer configuration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,6 +21,8 @@ jobs:
         run: composer validate
 
   static-analysis:
+    needs: validate
+    name: Run static analysis and code style checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,17 +33,6 @@ jobs:
           php-version: '8.2'
           coverage: none
           tools: composer:v2
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: deps-static-analysis-${{ hashFiles('**/composer.lock') }}
-          restore-keys: deps-static-analysis-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
@@ -55,6 +47,8 @@ jobs:
         run: composer rector:check
 
   security:
+    needs: validate
+    name: Run security vulnerability checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,17 +59,6 @@ jobs:
           php-version: '8.2'
           coverage: none
           tools: composer:v2
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: deps-security-${{ hashFiles('**/composer.lock') }}
-          restore-keys: deps-security-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
@@ -90,6 +73,7 @@ jobs:
           key: security-advisories-${{ github.sha }}
 
   tests:
+    needs: [security, static-analysis]
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 3
@@ -97,7 +81,7 @@ jobs:
       matrix:
         php: ['8.2', '8.3', '8.4']
         stability: [prefer-lowest, prefer-stable]
-    name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
+    name: Run tests on PHP ${{ matrix.php }} - ${{ matrix.stability }}
     steps:
       - uses: actions/checkout@v4
 
@@ -108,19 +92,6 @@ jobs:
           coverage: pcov
           tools: composer:v2
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: deps-php${{ matrix.php }}-${{ matrix.stability }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            deps-php${{ matrix.php }}-${{ matrix.stability }}-
-            deps-php${{ matrix.php }}-
-
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
@@ -129,6 +100,7 @@ jobs:
 
   dependencies-review:
     if: github.event_name == 'pull_request'
+    name: Review dependency changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
