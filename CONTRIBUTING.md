@@ -1,13 +1,13 @@
 # Contributing
 
-Thank you for considering contributing to PHP Robots.txt! This document outlines the process and guidelines for contributing to the project.
+Thank you for considering contributing to PHP Robots.txt! This document outlines the process and guidelines for contributing to the project. Please also review our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our community standards.
 
 ## Development Setup
 
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/robots-txt.git
+   git clone https://github.com/fkrzski/robots-txt.git
    ```
 3. Install dependencies:
    ```bash
@@ -39,20 +39,20 @@ Thank you for considering contributing to PHP Robots.txt! This document outlines
 Before submitting your PR, please ensure:
 
 1. All tests pass:
-    - Unit tests via PHPUnit/Pest
-    - Type coverage tests
-    - Mutation tests
+   - Unit tests via PHPUnit/Pest
+   - Type coverage tests
+   - Mutation tests
 
 2. Code follows PSR-12 standards:
-    - Run `composer cs:check` to check code style
-    - Run `composer cs:fix` to automatically fix style issues
+   - Run `composer cs:check` to check code style
+   - Run `composer cs:fix` to automatically fix style issues
 
 3. Static analysis shows no errors:
-    - Run `composer analyse` to check with PHPStan and Psalm
+   - Run `composer analyse` to check with PHPStan and Psalm
 
 4. Rector checks pass:
-    - Run `composer rector:check` to verify code quality
-    - Run `composer rector:fix` to automatically fix issues
+   - Run `composer rector:check` to verify code quality
+   - Run `composer rector:fix` to automatically fix issues
 
 ## Pull Request Process
 
@@ -61,16 +61,6 @@ Before submitting your PR, please ensure:
 3. Ensure the test suite passes
 4. Update the README.md with details of changes if needed
 5. The PR will be merged once you have the sign-off of at least one maintainer
-
-## Code of Conduct
-
-### Our Standards
-
-- Use welcoming and inclusive language
-- Be respectful of differing viewpoints and experiences
-- Gracefully accept constructive criticism
-- Focus on what is best for the community
-- Show empathy towards other community members
 
 ## Questions or Problems?
 
