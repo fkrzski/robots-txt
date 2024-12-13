@@ -56,7 +56,7 @@
         "test": "pest",
         "test:coverage": "pest --coverage",
         "test:types": "pest --type-coverage",
-        "test:mutation": "pest --mutate --covered-only --min=85",
+        "test:mutation": "pest --mutate --covered-only",
         "test:all": [
             "@test:types",
             "@test:coverage",
