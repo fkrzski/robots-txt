@@ -54,9 +54,9 @@
     },
     "scripts": {
         "test": "pest",
-        "test:coverage": "pest --coverage",
-        "test:types": "pest --type-coverage",
-        "test:mutation": "pest --mutate --covered-only",
+        "test:coverage": "pest --coverage --min=95",
+        "test:types": "pest --type-coverage --min=100",
+        "test:mutation": "pest --mutate --covered-only --min=95",
         "test:all": [
             "@test:types",
             "@test:coverage",
