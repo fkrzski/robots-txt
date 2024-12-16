@@ -156,6 +156,34 @@ final class RobotsTxt
     }
 
     /**
+     * Disallows or allows access to all paths using a wildcard.
+     *
+     * This is a convenience method for quickly blocking or allowing access to the entire site.
+     * When disallowing ($disallow = true), it clears all existing rules for the current context
+     * and adds a single "Disallow: /*" rule.
+     *
+     * @param bool $disallow If true, disallows all paths and clears other rules. If false, allows all paths.
+     *
+     * @return self For method chaining
+     * @throws InvalidArgumentException If path format is invalid
+     */
+    public function disallowAll(bool $disallow = true): self
+    {
+        if ($disallow) {
+            if ($this->crawlerEnum instanceof CrawlerEnum) {
+                $userAgentRule = $this->userAgentRules[$this->crawlerEnum->value][0];
+                $this->userAgentRules[$this->crawlerEnum->value] = [$userAgentRule];
+            } else {
+                $this->globalRules = [];
+            }
+
+            $this->disallow('/*');
+        }
+
+        return $this;
+    }
+
+    /**
      * Generates the complete robots.txt content.
      *
      * The output follows this order:

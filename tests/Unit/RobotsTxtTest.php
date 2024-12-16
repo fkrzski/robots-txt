@@ -346,3 +346,69 @@ test('sitemaps maintain order when mixed with other rules', function (): void {
         "Sitemap: https://example.com/sitemap3.xml"
     );
 });
+
+test('disallowAll clears global rules and adds disallow all', function (): void {
+    $robots = new RobotsTxt();
+    $robots
+        ->allow('/public')
+        ->disallow('/private')
+        ->disallowAll();
+
+    expect($robots->toString())->toBe(
+        "User-agent: *\n".
+        "Disallow: /*"
+    );
+});
+
+test('disallowAll clears only specific user agent rules', function (): void {
+    $robots = new RobotsTxt();
+    $robots
+        ->disallow('/admin')  // global rule
+        ->userAgent(CrawlerEnum::GOOGLE)
+        ->allow('/public')
+        ->disallow('/private')
+        ->disallowAll()
+        ->userAgent(CrawlerEnum::BING)
+        ->disallow('/secret');
+
+    expect($robots->toString())->toBe(
+        "User-agent: *\n".
+        "Disallow: /admin\n".
+        "\n".
+        "User-agent: Googlebot\n".
+        "Disallow: /*\n".
+        "\n".
+        "User-agent: Bingbot\n".
+        "Disallow: /secret"
+    );
+});
+
+test('disallowAll preserves sitemaps while clearing rules', function (): void {
+    $robots = new RobotsTxt();
+    $robots
+        ->allow('/public')
+        ->sitemap('https://example.com/sitemap1.xml')
+        ->disallow('/private')
+        ->sitemap('https://example.com/sitemap2.xml')
+        ->disallowAll();
+
+    expect($robots->toString())->toBe(
+        "User-agent: *\n".
+        "Disallow: /*\n".
+        "\n".
+        "Sitemap: https://example.com/sitemap1.xml\n".
+        "Sitemap: https://example.com/sitemap2.xml"
+    );
+});
+
+test('disallowAll with false parameter does nothing', function (): void {
+    $robots = new RobotsTxt();
+    $robots
+        ->disallow('/private')
+        ->disallowAll(false);
+
+    expect($robots->toString())->toBe(
+        "User-agent: *\n".
+        "Disallow: /private"
+    );
+});

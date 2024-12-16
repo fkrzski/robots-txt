@@ -100,6 +100,54 @@ Output:
 Sitemap: https://example.com/sitemap.xml
 ```
 
+#### disallowAll(bool $disallow = true)
+
+A convenience method for quickly blocking access to the entire site. When `$disallow` is true (default):
+- Clears all existing rules in the current context (global or user-agent specific)
+- Adds a single "Disallow: /*" rule
+- Preserves sitemap entries and rules for other user agents
+
+```php
+// Block everything globally
+$robots = new RobotsTxt();
+$robots
+    ->allow('/public')    // This will be cleared
+    ->disallow('/admin')  // This will be cleared
+    ->disallowAll();     // Only Disallow: /* remains
+
+Output:
+```
+User-agent: *
+Disallow: /*
+```
+
+Block access only for specific crawler:
+```php
+$robots = new RobotsTxt();
+$robots
+    ->disallow('/admin')          // Global rule - keeps
+    ->userAgent(CrawlerEnum::GOOGLE)
+    ->allow('/public')            // Google rule - cleared
+    ->disallow('/private')        // Google rule - cleared
+    ->disallowAll()               // Only Disallow: /* for Google
+    ->userAgent(CrawlerEnum::BING)
+    ->disallow('/secret');        // Bing rule - keeps
+```
+
+Output:
+```
+User-agent: *
+Disallow: /admin
+
+User-agent: Googlebot
+Disallow: /*
+
+User-agent: Bingbot
+Disallow: /secret
+```
+
+When `$disallow` is false, the method does nothing.
+
 #### userAgent(CrawlerEnum $crawler)
 
 Sets the context for subsequent rules to apply to a specific crawler.
