@@ -1,7 +1,6 @@
 {
     "name": "fkrzski/robots-txt",
     "description": "A modern, fluent PHP package for managing robots.txt rules with type safety and great developer experience",
-    "version": "dev-0.1.0",
     "type": "library",
     "keywords": [
         "robots.txt",
