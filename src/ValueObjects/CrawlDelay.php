@@ -7,6 +7,14 @@ namespace Fkrzski\RobotsTxt\ValueObjects;
 use Fkrzski\RobotsTxt\Contracts\ValueObject;
 use InvalidArgumentException;
 
+/**
+ * Represents a crawl delay directive in seconds.
+ *
+ * The crawl delay specifies how many seconds a crawler should wait
+ * between successive requests to the same server.
+ *
+ * @implements ValueObject<int>
+ */
 final readonly class CrawlDelay implements ValueObject
 {
     public function __construct(
@@ -15,21 +23,25 @@ final readonly class CrawlDelay implements ValueObject
         $this->validate();
     }
 
+    /** @inheritDoc */
     public function value(): int
     {
         return $this->seconds;
     }
 
+    /** @inheritDoc */
     public function toString(): string
     {
         return (string) $this->seconds;
     }
 
+    /** @inheritDoc */
     public function equals(ValueObject $other): bool
     {
         return $this->value() === $other->value();
     }
 
+    /** @inheritDoc */
     public function validate(): void
     {
         if ($this->seconds < 0) {

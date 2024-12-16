@@ -7,6 +7,17 @@ namespace Fkrzski\RobotsTxt\ValueObjects;
 use Fkrzski\RobotsTxt\Contracts\ValueObject;
 use InvalidArgumentException;
 
+/**
+ * Represents a sitemap URL in the robots.txt file.
+ *
+ * A valid sitemap URL must:
+ * - Be a valid URL
+ * - Use either HTTP or HTTPS protocol
+ * - End with .xml extension
+ * - Not be empty
+ *
+ * @implements ValueObject<string>
+ */
 final readonly class Sitemap implements ValueObject
 {
     public function __construct(
@@ -15,21 +26,25 @@ final readonly class Sitemap implements ValueObject
         $this->validate();
     }
 
+    /** @inheritDoc */
     public function value(): string
     {
         return $this->url;
     }
 
+    /** @inheritDoc */
     public function toString(): string
     {
         return $this->url;
     }
 
+    /** @inheritDoc */
     public function equals(ValueObject $other): bool
     {
         return $this->value() === $other->value();
     }
 
+    /** @inheritDoc */
     public function validate(): void
     {
         if ($this->url === '') {

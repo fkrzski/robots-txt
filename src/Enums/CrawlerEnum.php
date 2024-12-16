@@ -4,6 +4,22 @@ declare(strict_types=1);
 
 namespace Fkrzski\RobotsTxt\Enums;
 
+/**
+ * Represents supported web crawlers and their corresponding User-Agent strings.
+ *
+ * This enum defines a comprehensive list of web crawlers that can be used in robots.txt
+ * rules. Each case maps to the official User-Agent string for that crawler.
+ *
+ * Crawlers are grouped into categories:
+ * - Major search engines (Google, Bing, Yahoo)
+ * - Social media platforms
+ * - E-commerce platforms
+ * - SEO tools
+ * - Archive services
+ * - Feed readers and validators
+ *
+ * @since 1.0.0
+ */
 enum CrawlerEnum: string
 {
     // Google Bots
