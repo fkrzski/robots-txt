@@ -412,3 +412,81 @@ test('disallowAll with false parameter does nothing', function (): void {
         "Disallow: /private"
     );
 });
+
+test('toFile saves robots.txt content to default location', function (): void {
+    $tempDir = sys_get_temp_dir();
+    $originalCwd = getcwd();
+
+    try {
+        chdir($tempDir);
+
+        $robots = new RobotsTxt();
+        $robots
+            ->disallow('/admin')
+            ->allow('/public');
+
+        $result = $robots->toFile();
+
+        expect($result)->toBeTrue()
+            ->and(file_exists($tempDir.'/robots.txt'))->toBeTrue()
+            ->and(file_get_contents($tempDir.'/robots.txt'))->toBe($robots->toString());
+
+        unlink($tempDir.'/robots.txt');
+    } finally {
+        chdir($originalCwd);
+    }
+});
+
+test('toFile saves robots.txt content to custom location', function (): void {
+    $tempFile = tempnam(sys_get_temp_dir(), 'robots_');
+    unlink($tempFile); // Remove the file to test creation
+
+    $robots = new RobotsTxt();
+    $robots
+        ->disallow('/admin')
+        ->allow('/public');
+
+    $result = $robots->toFile($tempFile);
+
+    expect($result)->toBeTrue()
+        ->and(file_exists($tempFile))->toBeTrue()
+        ->and(file_get_contents($tempFile))->toBe($robots->toString());
+
+    unlink($tempFile);
+});
+
+test('toFile throws exception when directory exists but is not writable', function (): void {
+    $tempDir = sys_get_temp_dir().'/robots_test_'.uniqid();
+    mkdir($tempDir, 0o444); // Read-only directory
+
+    try {
+        $robots = new RobotsTxt();
+        expect(fn (): bool => $robots->toFile($tempDir.'/robots.txt'))
+            ->toThrow(RuntimeException::class, 'Directory is not writable');
+    } finally {
+        chmod($tempDir, 0o777); // Make writable so we can delete it
+        rmdir($tempDir);
+    }
+});
+
+test('toFile throws exception when directory does not exist', function (): void {
+    $robots = new RobotsTxt();
+    $nonexistentPath = sys_get_temp_dir().'/nonexistent_'.uniqid().'/robots.txt';
+
+    expect(fn (): bool => $robots->toFile($nonexistentPath))
+        ->toThrow(RuntimeException::class, 'Directory is not writable');
+});
+
+test('toFile throws exception when existing robots.txt file is not writable', function (): void {
+    $tempFile = tempnam(sys_get_temp_dir(), 'robots_');
+    chmod($tempFile, 0o444); // Make read-only
+
+    try {
+        $robots = new RobotsTxt();
+        expect(fn (): bool => $robots->toFile($tempFile))
+            ->toThrow(RuntimeException::class, 'Existing robots.txt file is not writable');
+    } finally {
+        chmod($tempFile, 0o666); // Make writable so we can delete it
+        unlink($tempFile);
+    }
+});

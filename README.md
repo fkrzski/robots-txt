@@ -308,6 +308,29 @@ Allow: /public/*
 Disallow: /private/$
 ```
 
+#### toFile(?string $path = null)
+
+Saves the robots.txt content to a file. If no path is provided, saves to `robots.txt` in the project root directory.
+
+```php
+$robots = new RobotsTxt();
+$robots
+    ->disallow('/admin')
+    ->allow('/public');
+
+// Save to default location (project root)
+$robots->toFile();
+
+// Save to custom location
+$robots->toFile('/var/www/html/robots.txt');
+```
+
+The method will throw a `RuntimeException` if:
+- The target directory doesn't exist or isn't writable
+- The existing robots.txt file isn't writable
+
+Returns `true` if the file was successfully written.
+
 ### Best Practices
 
 1. **Start with Global Rules**: Define global rules before crawler-specific rules for better organization.

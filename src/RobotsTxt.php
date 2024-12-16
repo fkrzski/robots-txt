@@ -14,6 +14,7 @@ use Fkrzski\RobotsTxt\ValueObjects\Rule;
 use Fkrzski\RobotsTxt\ValueObjects\Sitemap;
 use Fkrzski\RobotsTxt\ValueObjects\UserAgent;
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Main class for building robots.txt files with a fluent interface.
@@ -181,6 +182,33 @@ final class RobotsTxt
         }
 
         return $this;
+    }
+
+    /**
+     * Saves the robots.txt content to a file.
+     *
+     * If no path is provided, saves to robots.txt in the project root directory.
+     * Throws an exception if the file cannot be written or the directory is not writable.
+     *
+     * @param string|null $path Optional custom path where the file should be saved
+     *
+     * @return bool True if the file was successfully written
+     * @throws RuntimeException If the file cannot be written
+     */
+    public function toFile(?string $path = null): bool
+    {
+        $filePath = $path ?? (getcwd() ?: __DIR__).'/robots.txt';
+
+        if (file_exists($filePath) && !is_writable($filePath)) {
+            throw new RuntimeException('Existing robots.txt file is not writable');
+        }
+
+        $directory = dirname($filePath);
+        if (!is_dir($directory) || !is_writable($directory)) {
+            throw new RuntimeException('Directory is not writable');
+        }
+
+        return (bool)file_put_contents($filePath, $this->toString());
     }
 
     /**
