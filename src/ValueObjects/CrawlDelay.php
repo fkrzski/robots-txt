@@ -36,9 +36,9 @@ final readonly class CrawlDelay implements ValueObject
     }
 
     /** @inheritDoc */
-    public function equals(ValueObject $other): bool
+    public function equals(ValueObject $valueObject): bool
     {
-        return $this->value() === $other->value();
+        return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */

@@ -14,7 +14,7 @@ use InvalidArgumentException;
  * that represent a specific value or concept (like a path, user agent, or sitemap URL)
  * and are compared based on their values rather than their identity.
  *
- * @template T The type of the value stored in the value object
+ * @template-covariant T The type of the value stored in the value object
  * @since 1.0.0
  */
 interface ValueObject
@@ -26,7 +26,7 @@ interface ValueObject
      * Each value object must be able to represent itself as a valid
      * robots.txt string.
      *
-     * @return mixed The representation of the value object
+     * @return T The raw value stored in the value object
      */
     public function value(): mixed;
 
@@ -48,11 +48,11 @@ interface ValueObject
      * and their values are equal. This is different from identity
      * comparison (===) which compares object references.
      *
-     * @param ValueObject<T> $other The value object to compare with
+     * @param ValueObject<mixed> $valueObject The value object to compare with
      *
      * @return bool True if the value objects are equal, false otherwise
      */
-    public function equals(self $other): bool;
+    public function equals(self $valueObject): bool;
 
     /**
      * Validates the value object's internal state.
@@ -62,8 +62,6 @@ interface ValueObject
      * an exception if any validation rules are violated.
      *
      * @throws InvalidArgumentException If the value object's state is invalid
-     *
-     * @return void
      */
     public function validate(): void;
 }

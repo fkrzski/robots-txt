@@ -15,8 +15,8 @@ test('can create allow rule with path', function (): void {
 
     expect($rule)
         ->toBeInstanceOf(Rule::class)
-        ->and($rule->directive)->toBe(DirectiveEnum::ALLOW)
-        ->and($rule->value)->toBe($path)
+        ->and($rule->directiveEnum)->toBe(DirectiveEnum::ALLOW)
+        ->and($rule->valueObject)->toBe($path)
         ->and($rule->toString())->toBe('Allow: /path');
 });
 

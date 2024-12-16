@@ -48,37 +48,13 @@ final class RobotsTxt
     private array $sitemaps = [];
 
     /** @var CrawlerEnum|null Current user agent context for rule addition */
-    private ?CrawlerEnum $currentUserAgent = null;
-
-    /**
-     * Adds a rule to either global rules or current user agent rules.
-     *
-     * @template T of string|int|CrawlerEnum
-     *
-     * @param DirectiveEnum $directive The type of rule to add
-     * @param ValueObject<T> $value The value for the rule
-     *
-     * @return self For method chaining
-     */
-    private function addRule(DirectiveEnum $directive, ValueObject $value): self
-    {
-        $rule = new Rule($directive, $value);
-
-        if ($this->currentUserAgent === null) {
-            $this->globalRules[] = $rule;
-        } else {
-            $this->userAgentRules[$this->currentUserAgent->value][] = $rule;
-        }
-
-        return $this;
-    }
+    private ?CrawlerEnum $crawlerEnum = null;
 
     /**
      * Allows access to a specific path.
      *
      * @param string $path Path to allow
      *
-     * @return self
      * @throws InvalidArgumentException If path format is invalid
      */
     public function allow(string $path): self
@@ -91,7 +67,6 @@ final class RobotsTxt
      *
      * @param string $path Path to disallow
      *
-     * @return self
      * @throws InvalidArgumentException If path format is invalid
      */
     public function disallow(string $path): self
@@ -104,9 +79,7 @@ final class RobotsTxt
      *
      * @param int $seconds Delay in seconds (must be non-negative)
      *
-     * @return self
      * @throws InvalidArgumentException If seconds is negative
-     *
      */
     public function crawlDelay(int $seconds): self
     {
@@ -128,20 +101,18 @@ final class RobotsTxt
      * });
      * ```
      *
-     * @param CrawlerEnum $crawler The crawler to apply rules to
+     * @param CrawlerEnum $crawlerEnum The crawler to apply rules to
      * @param Closure(RobotsTxt): void $rules Closure containing the rules
-     *
-     * @return self
      */
-    public function forUserAgent(CrawlerEnum $crawler, Closure $rules): self
+    public function forUserAgent(CrawlerEnum $crawlerEnum, Closure $rules): self
     {
-        $previousUserAgent = $this->currentUserAgent;
+        $previousUserAgent = $this->crawlerEnum;
 
-        $this->userAgent($crawler);
+        $this->userAgent($crawlerEnum);
 
         $rules($this);
 
-        $this->currentUserAgent = $previousUserAgent;
+        $this->crawlerEnum = $previousUserAgent;
 
         return $this;
     }
@@ -152,19 +123,17 @@ final class RobotsTxt
      * All rules added after this call will apply to this user agent
      * until another user agent is set or rules are added to the global context.
      *
-     * @param CrawlerEnum $crawler The crawler to set as current context
-     *
-     * @return self
+     * @param CrawlerEnum $crawlerEnum The crawler to set as current context
      */
-    public function userAgent(CrawlerEnum $crawler): self
+    public function userAgent(CrawlerEnum $crawlerEnum): self
     {
-        $this->currentUserAgent = $crawler;
+        $this->crawlerEnum = $crawlerEnum;
 
-        if (!isset($this->userAgentRules[$crawler->value])) {
+        if (!isset($this->userAgentRules[$crawlerEnum->value])) {
             /** @var ValueObject<CrawlerEnum|int|string> $userAgent */
-            $userAgent = new UserAgent($crawler);
+            $userAgent = new UserAgent($crawlerEnum);
             $rule = new Rule(DirectiveEnum::USER_AGENT, $userAgent);
-            $this->userAgentRules[$crawler->value] = [$rule];
+            $this->userAgentRules[$crawlerEnum->value] = [$rule];
         }
 
         return $this;
@@ -175,15 +144,13 @@ final class RobotsTxt
      *
      * @param string $url URL of the sitemap (must be valid HTTP(S) URL ending in .xml)
      *
-     * @return self
      * @throws InvalidArgumentException If URL format is invalid
      */
     public function sitemap(string $url): self
     {
-        /** @var ValueObject<CrawlerEnum|int|string> $sitemapObject */
-        $sitemapObject = new Sitemap($url);
+        $sitemap = new Sitemap($url);
 
-        $this->sitemaps[] = new Rule(DirectiveEnum::SITEMAP, $sitemapObject);
+        $this->sitemaps[] = new Rule(DirectiveEnum::SITEMAP, $sitemap);
 
         return $this;
     }
@@ -205,33 +172,56 @@ final class RobotsTxt
     {
         $output = [];
 
-        if (!empty($this->globalRules)) {
+        if ($this->globalRules !== []) {
             $output[] = 'User-agent: *';
 
-            foreach ($this->globalRules as $rule) {
+            foreach ($this->globalRules as $globalRule) {
+                $output[] = $globalRule->toString();
+            }
+
+            $output[] = '';
+        }
+
+        foreach ($this->userAgentRules as $userAgentRule) {
+            foreach ($userAgentRule as $rule) {
                 $output[] = $rule->toString();
             }
 
             $output[] = '';
         }
 
-        foreach ($this->userAgentRules as $rules) {
-            foreach ($rules as $rule) {
-                $output[] = $rule->toString();
-            }
 
-            $output[] = '';
-        }
-
-
-        if (!empty($this->sitemaps)) {
-            foreach ($this->sitemaps as $sitemapRule) {
-                $output[] = $sitemapRule->toString();
+        if ($this->sitemaps !== []) {
+            foreach ($this->sitemaps as $sitemap) {
+                $output[] = $sitemap->toString();
             }
 
             $output[] = '';
         }
 
         return trim(implode("\n", $output), "\n");
+    }
+
+    /**
+     * Adds a rule to either global rules or current user agent rules.
+     *
+     * @template T of string|int|CrawlerEnum
+     *
+     * @param DirectiveEnum $directiveEnum The type of rule to add
+     * @param ValueObject<T> $valueObject The value for the rule
+     *
+     * @return self For method chaining
+     */
+    private function addRule(DirectiveEnum $directiveEnum, ValueObject $valueObject): self
+    {
+        $rule = new Rule($directiveEnum, $valueObject);
+
+        if (!$this->crawlerEnum instanceof CrawlerEnum) {
+            $this->globalRules[] = $rule;
+        } else {
+            $this->userAgentRules[$this->crawlerEnum->value][] = $rule;
+        }
+
+        return $this;
     }
 }

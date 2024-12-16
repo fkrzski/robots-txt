@@ -52,7 +52,7 @@ test('crawler enum cases are in uppercase', function (): void {
 
 test('each major search engine has representation', function (): void {
     $values = array_map(
-        static fn (CrawlerEnum $case): string => $case->value,
+        static fn (CrawlerEnum $crawlerEnum): string => $crawlerEnum->value,
         CrawlerEnum::cases()
     );
 

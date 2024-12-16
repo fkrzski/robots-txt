@@ -20,13 +20,14 @@ use Fkrzski\RobotsTxt\Enums\DirectiveEnum;
 final readonly class Rule implements ValueObject
 {
     /**
-     * @param DirectiveEnum $directive The directive type for this rule
-     * @param ValueObject<string|int|CrawlerEnum> $value The value for this directive
+     * @param DirectiveEnum $directiveEnum The directive type for this rule
+     * @param ValueObject<(string | int | CrawlerEnum)> $valueObject The value for this directive
      */
     public function __construct(
-        public DirectiveEnum $directive,
-        public ValueObject   $value
-    ) {}
+        public DirectiveEnum $directiveEnum,
+        public ValueObject   $valueObject
+    ) {
+    }
 
     /** @inheritDoc */
     public function value(): string
@@ -37,18 +38,18 @@ final readonly class Rule implements ValueObject
     /** @inheritDoc */
     public function toString(): string
     {
-        return sprintf('%s: %s', $this->directive->value, $this->value->toString());
+        return sprintf('%s: %s', $this->directiveEnum->value, $this->valueObject->toString());
     }
 
     /** @inheritDoc */
-    public function equals(ValueObject $other): bool
+    public function equals(ValueObject $valueObject): bool
     {
-        return $this->value() === $other->value();
+        return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
     public function validate(): void
     {
-        $this->value->validate();
+        $this->valueObject->validate();
     }
 }

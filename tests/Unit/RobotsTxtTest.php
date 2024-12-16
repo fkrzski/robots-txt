@@ -20,8 +20,8 @@ test('can add global rules', function (): void {
         ->allow('/public');
 
     expect($robots->toString())->toBe(
-        "User-agent: *\n" .
-        "Disallow: /admin\n" .
+        "User-agent: *\n".
+        "Disallow: /admin\n".
         "Allow: /public"
     );
 });
@@ -35,9 +35,9 @@ test('can add rules for specific crawler', function (): void {
         ->crawlDelay(10);
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "Allow: /public\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "Allow: /public\n".
         "Crawl-delay: 10"
     );
 });
@@ -52,13 +52,13 @@ test('can mix global and specific rules', function (): void {
         ->disallow('/secret');
 
     expect($robots->toString())->toBe(
-        "User-agent: *\n" .
-        "Disallow: /admin\n" .
-        "\n" .
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
+        "User-agent: *\n".
+        "Disallow: /admin\n".
+        "\n".
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "\n".
+        "User-agent: Bingbot\n".
         "Disallow: /secret"
     );
 });
@@ -70,7 +70,7 @@ test('can add sitemaps', function (): void {
         ->sitemap('https://example.com/news-sitemap.xml');
 
     expect($robots->toString())->toBe(
-        "Sitemap: https://example.com/sitemap.xml\n" .
+        "Sitemap: https://example.com/sitemap.xml\n".
         "Sitemap: https://example.com/news-sitemap.xml"
     );
 });
@@ -78,17 +78,17 @@ test('can add sitemaps', function (): void {
 test('can use closure for user agent rules', function (): void {
     $robots = new RobotsTxt();
 
-    $robots->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
-        $robots
+    $robots->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robotsTxt): void {
+        $robotsTxt
             ->disallow('/private')
             ->allow('/public')
             ->crawlDelay(10);
     });
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "Allow: /public\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "Allow: /public\n".
         "Crawl-delay: 10"
     );
 });
@@ -98,27 +98,27 @@ test('can nest multiple user agents with closures', function (): void {
 
     $robots
         ->disallow('/admin') // global rule
-        ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
-            $robots
+        ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robotsTxt): void {
+            $robotsTxt
                 ->disallow('/google-specific')
                 ->allow('/public');
         })
-        ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robots): void {
-            $robots
+        ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robotsTxt): void {
+            $robotsTxt
                 ->disallow('/bing-specific')
                 ->crawlDelay(5);
         });
 
     expect($robots->toString())->toBe(
-        "User-agent: *\n" .
-        "Disallow: /admin\n" .
-        "\n" .
-        "User-agent: Googlebot\n" .
-        "Disallow: /google-specific\n" .
-        "Allow: /public\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
-        "Disallow: /bing-specific\n" .
+        "User-agent: *\n".
+        "Disallow: /admin\n".
+        "\n".
+        "User-agent: Googlebot\n".
+        "Disallow: /google-specific\n".
+        "Allow: /public\n".
+        "\n".
+        "User-agent: Bingbot\n".
+        "Disallow: /bing-specific\n".
         "Crawl-delay: 5"
     );
 });
@@ -132,9 +132,9 @@ test('rules are added in correct order', function (): void {
         ->crawlDelay(5);
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Allow: /first\n" .
-        "Disallow: /second\n" .
+        "User-agent: Googlebot\n".
+        "Allow: /first\n".
+        "Disallow: /second\n".
         "Crawl-delay: 5"
     );
 });
@@ -150,11 +150,11 @@ test('switching user agent context preserves previous rules', function (): void 
         ->allow('/google-public');
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /google\n" .
-        "Allow: /google-public\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /google\n".
+        "Allow: /google-public\n".
+        "\n".
+        "User-agent: Bingbot\n".
         "Disallow: /bing"
     );
 });
@@ -169,13 +169,13 @@ test('can mix global rules with user agent rules and sitemaps', function (): voi
         ->sitemap('https://example.com/sitemap2.xml');
 
     expect($robots->toString())->toBe(
-        "User-agent: *\n" .
-        "Disallow: /admin\n" .
-        "\n" .
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "\n" .
-        "Sitemap: https://example.com/sitemap1.xml\n" .
+        "User-agent: *\n".
+        "Disallow: /admin\n".
+        "\n".
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "\n".
+        "Sitemap: https://example.com/sitemap1.xml\n".
         "Sitemap: https://example.com/sitemap2.xml"
     );
 });
@@ -187,15 +187,15 @@ test('empty rules sections are not included in output', function (): void {
         ->userAgent(CrawlerEnum::GOOGLE);
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "\n" .
+        "User-agent: Googlebot\n".
+        "\n".
         "Sitemap: https://example.com/sitemap.xml"
     );
 });
 
 test('can handle multiple user agents with same rules', function (): void {
-    $rules = function (RobotsTxt $robots): void {
-        $robots
+    $rules = function (RobotsTxt $robotsTxt): void {
+        $robotsTxt
             ->disallow('/private')
             ->allow('/public');
     };
@@ -206,12 +206,12 @@ test('can handle multiple user agents with same rules', function (): void {
         ->forUserAgent(CrawlerEnum::BING, $rules);
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "Allow: /public\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
-        "Disallow: /private\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "Allow: /public\n".
+        "\n".
+        "User-agent: Bingbot\n".
+        "Disallow: /private\n".
         "Allow: /public"
     );
 });
@@ -221,25 +221,25 @@ test('nested user agent closures maintain correct scope', function (): void {
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->disallow('/before')
-        ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robots): void {
-            $robots->disallow('/bing');
-            $robots->forUserAgent(CrawlerEnum::FACEBOOK, function (RobotsTxt $robots): void {
-                $robots->disallow('/facebook');
+        ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robotsTxt): void {
+            $robotsTxt->disallow('/bing');
+            $robotsTxt->forUserAgent(CrawlerEnum::FACEBOOK, function (RobotsTxt $robotsTxt): void {
+                $robotsTxt->disallow('/facebook');
             });
-            $robots->disallow('/bing-after');
+            $robotsTxt->disallow('/bing-after');
         })
         ->disallow('/after');
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /before\n" .
-        "Disallow: /after\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
-        "Disallow: /bing\n" .
-        "Disallow: /bing-after\n" .
-        "\n" .
-        "User-agent: facebookexternalhit\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /before\n".
+        "Disallow: /after\n".
+        "\n".
+        "User-agent: Bingbot\n".
+        "Disallow: /bing\n".
+        "Disallow: /bing-after\n".
+        "\n".
+        "User-agent: facebookexternalhit\n".
         "Disallow: /facebook"
     );
 });
@@ -253,9 +253,9 @@ test('can handle wildcards in paths', function (): void {
         ->disallow('/private/$');
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Allow: /public/*\n" .
-        "Disallow: /*.php\n" .
+        "User-agent: Googlebot\n".
+        "Allow: /public/*\n".
+        "Disallow: /*.php\n".
         "Disallow: /private/$"
     );
 });
@@ -263,49 +263,49 @@ test('can handle wildcards in paths', function (): void {
 test('sitemap must be a valid https url', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->sitemap('not-a-url'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('not-a-url'))
         ->toThrow(InvalidArgumentException::class, 'Invalid sitemap URL format');
 });
 
 test('sitemap must use http or https protocol', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->sitemap('ftp://example.com/sitemap.xml'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('ftp://example.com/sitemap.xml'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must use HTTP(S) protocol');
 });
 
 test('sitemap must have xml extension', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->sitemap('https://example.com/sitemap.txt'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('https://example.com/sitemap.txt'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must be in .xml format');
 });
 
 test('path must start with forward slash', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->disallow('invalid/path'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->disallow('invalid/path'))
         ->toThrow(InvalidArgumentException::class, 'Path must start with forward slash (/)');
 });
 
 test('path cannot contain query parameters', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->allow('/path?query=value'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->allow('/path?query=value'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain query parameters');
 });
 
 test('path cannot contain fragments', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->disallow('/path#fragment'))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->disallow('/path#fragment'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain fragments');
 });
 
 test('path cannot be empty', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn () => $robots->allow(''))
+    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->allow(''))
         ->toThrow(InvalidArgumentException::class, 'Path cannot be empty');
 });
 
@@ -317,8 +317,8 @@ test('sitemaps are rendered in order of addition', function (): void {
         ->sitemap('https://example.com/sitemap3.xml');
 
     expect($robots->toString())->toBe(
-        "Sitemap: https://example.com/sitemap1.xml\n" .
-        "Sitemap: https://example.com/sitemap2.xml\n" .
+        "Sitemap: https://example.com/sitemap1.xml\n".
+        "Sitemap: https://example.com/sitemap2.xml\n".
         "Sitemap: https://example.com/sitemap3.xml"
     );
 });
@@ -335,14 +335,14 @@ test('sitemaps maintain order when mixed with other rules', function (): void {
         ->sitemap('https://example.com/sitemap3.xml');
 
     expect($robots->toString())->toBe(
-        "User-agent: Googlebot\n" .
-        "Disallow: /private\n" .
-        "\n" .
-        "User-agent: Bingbot\n" .
-        "Disallow: /secret\n" .
-        "\n" .
-        "Sitemap: https://example.com/sitemap1.xml\n" .
-        "Sitemap: https://example.com/sitemap2.xml\n" .
+        "User-agent: Googlebot\n".
+        "Disallow: /private\n".
+        "\n".
+        "User-agent: Bingbot\n".
+        "Disallow: /secret\n".
+        "\n".
+        "Sitemap: https://example.com/sitemap1.xml\n".
+        "Sitemap: https://example.com/sitemap2.xml\n".
         "Sitemap: https://example.com/sitemap3.xml"
     );
 });

@@ -21,7 +21,7 @@ test('can create crawl delay with zero', function (): void {
 });
 
 test('cannot create crawl delay with negative value', function (): void {
-    expect(fn () => new CrawlDelay(-1))
+    expect(fn (): \Fkrzski\RobotsTxt\ValueObjects\CrawlDelay => new CrawlDelay(-1))
         ->toThrow(InvalidArgumentException::class, 'Crawl delay cannot be negative');
 });
 

@@ -12,7 +12,10 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+
     <issueHandlers>
         <MissingConstructor errorLevel="suppress"/>
+        <PossiblyUnusedMethod errorLevel="suppress"/>
+        <PossiblyUnusedReturnValue errorLevel="suppress"/>
     </issueHandlers>
 </psalm>

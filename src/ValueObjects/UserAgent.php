@@ -18,25 +18,26 @@ use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
 final readonly class UserAgent implements ValueObject
 {
     public function __construct(
-        private CrawlerEnum $crawler
-    ) {}
+        private CrawlerEnum $crawlerEnum
+    ) {
+    }
 
     /** @inheritDoc */
     public function value(): CrawlerEnum
     {
-        return $this->crawler;
+        return $this->crawlerEnum;
     }
 
     /** @inheritDoc */
     public function toString(): string
     {
-        return $this->crawler->value;
+        return $this->crawlerEnum->value;
     }
 
     /** @inheritDoc */
-    public function equals(ValueObject $other): bool
+    public function equals(ValueObject $valueObject): bool
     {
-        return $this->value() === $other->value();
+        return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */

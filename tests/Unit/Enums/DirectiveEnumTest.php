@@ -6,7 +6,7 @@ use Fkrzski\RobotsTxt\Enums\DirectiveEnum;
 
 mutates(DirectiveEnum::class);
 
-test('directive enum contains exactly 5 cases', function () {
+test('directive enum contains exactly 5 cases', function (): void {
     expect(count(DirectiveEnum::cases()))->toBe(5);
 });
 
@@ -41,7 +41,7 @@ test('directive enum values contain only allowed characters', function (): void 
 
 test('directive enum has all required robot.txt directives', function (): void {
     $values = array_map(
-        static fn (DirectiveEnum $case): string => $case->value,
+        static fn (DirectiveEnum $directiveEnum): string => $directiveEnum->value,
         DirectiveEnum::cases()
     );
 

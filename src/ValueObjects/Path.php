@@ -23,8 +23,7 @@ final readonly class Path implements ValueObject
 {
     public function __construct(
         private string $path
-    )
-    {
+    ) {
         $this->validate();
     }
 
@@ -41,9 +40,9 @@ final readonly class Path implements ValueObject
     }
 
     /** @inheritDoc */
-    public function equals(ValueObject $other): bool
+    public function equals(ValueObject $valueObject): bool
     {
-        return $this->value() === $other->value();
+        return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
