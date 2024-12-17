@@ -114,6 +114,7 @@ $robots
     ->allow('/public')    // This will be cleared
     ->disallow('/admin')  // This will be cleared
     ->disallowAll();     // Only Disallow: /* remains
+```
 
 Output:
 ```
