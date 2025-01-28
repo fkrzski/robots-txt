@@ -263,49 +263,49 @@ test('can handle wildcards in paths', function (): void {
 test('sitemap must be a valid https url', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('not-a-url'))
+    expect(fn (): RobotsTxt => $robots->sitemap('not-a-url'))
         ->toThrow(InvalidArgumentException::class, 'Invalid sitemap URL format');
 });
 
 test('sitemap must use http or https protocol', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('ftp://example.com/sitemap.xml'))
+    expect(fn (): RobotsTxt => $robots->sitemap('ftp://example.com/sitemap.xml'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must use HTTP(S) protocol');
 });
 
 test('sitemap must have xml extension', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->sitemap('https://example.com/sitemap.txt'))
+    expect(fn (): RobotsTxt => $robots->sitemap('https://example.com/sitemap.txt'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must be in .xml format');
 });
 
 test('path must start with forward slash', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->disallow('invalid/path'))
+    expect(fn (): RobotsTxt => $robots->disallow('invalid/path'))
         ->toThrow(InvalidArgumentException::class, 'Path must start with forward slash (/)');
 });
 
 test('path cannot contain query parameters', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->allow('/path?query=value'))
+    expect(fn (): RobotsTxt => $robots->allow('/path?query=value'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain query parameters');
 });
 
 test('path cannot contain fragments', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->disallow('/path#fragment'))
+    expect(fn (): RobotsTxt => $robots->disallow('/path#fragment'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain fragments');
 });
 
 test('path cannot be empty', function (): void {
     $robots = new RobotsTxt();
 
-    expect(fn (): \Fkrzski\RobotsTxt\RobotsTxt => $robots->allow(''))
+    expect(fn (): RobotsTxt => $robots->allow(''))
         ->toThrow(InvalidArgumentException::class, 'Path cannot be empty');
 });
 

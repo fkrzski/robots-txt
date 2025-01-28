@@ -6,6 +6,7 @@ namespace Fkrzski\RobotsTxt\ValueObjects;
 
 use Fkrzski\RobotsTxt\Contracts\ValueObject;
 use InvalidArgumentException;
+use Override;
 
 /**
  * Represents a crawl delay directive in seconds.
@@ -24,24 +25,28 @@ final readonly class CrawlDelay implements ValueObject
     }
 
     /** @inheritDoc */
+    #[Override]
     public function value(): int
     {
         return $this->seconds;
     }
 
     /** @inheritDoc */
+    #[Override]
     public function toString(): string
     {
         return (string) $this->seconds;
     }
 
     /** @inheritDoc */
+    #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
+    #[Override]
     public function validate(): void
     {
         if ($this->seconds < 0) {
