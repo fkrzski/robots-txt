@@ -28,24 +28,28 @@ final readonly class Path implements ValueObject
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function value(): string
     {
         return $this->path;
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function toString(): string
     {
         return $this->path;
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function validate(): void
     {
         if ($this->path === '') {

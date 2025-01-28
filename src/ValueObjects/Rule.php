@@ -30,24 +30,28 @@ final readonly class Rule implements ValueObject
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function value(): string
     {
         return $this->toString();
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function toString(): string
     {
         return sprintf('%s: %s', $this->directiveEnum->value, $this->valueObject->toString());
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function validate(): void
     {
         $this->valueObject->validate();

@@ -27,24 +27,28 @@ final readonly class Sitemap implements ValueObject
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function value(): string
     {
         return $this->url;
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function toString(): string
     {
         return $this->url;
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
+    #[\Override]
     public function validate(): void
     {
         if ($this->url === '') {
