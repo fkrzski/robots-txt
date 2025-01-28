@@ -6,6 +6,7 @@ namespace Fkrzski\RobotsTxt\ValueObjects;
 
 use Fkrzski\RobotsTxt\Contracts\ValueObject;
 use InvalidArgumentException;
+use Override;
 
 /**
  * Represents a sitemap URL in the robots.txt file.
@@ -27,28 +28,28 @@ final readonly class Sitemap implements ValueObject
     }
 
     /** @inheritDoc */
-    #[\Override]
+    #[Override]
     public function value(): string
     {
         return $this->url;
     }
 
     /** @inheritDoc */
-    #[\Override]
+    #[Override]
     public function toString(): string
     {
         return $this->url;
     }
 
     /** @inheritDoc */
-    #[\Override]
+    #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
     /** @inheritDoc */
-    #[\Override]
+    #[Override]
     public function validate(): void
     {
         if ($this->url === '') {

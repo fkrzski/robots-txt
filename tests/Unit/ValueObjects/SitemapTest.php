@@ -23,22 +23,22 @@ test('can create sitemap with valid http url', function (): void {
 });
 
 test('cannot create sitemap with empty string', function (): void {
-    expect(fn (): \Fkrzski\RobotsTxt\ValueObjects\Sitemap => new Sitemap(''))
+    expect(fn (): Sitemap => new Sitemap(''))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL cannot be empty');
 });
 
 test('cannot create sitemap with invalid url format', function (): void {
-    expect(fn (): \Fkrzski\RobotsTxt\ValueObjects\Sitemap => new Sitemap('invalid-url'))
+    expect(fn (): Sitemap => new Sitemap('invalid-url'))
         ->toThrow(InvalidArgumentException::class, 'Invalid sitemap URL format');
 });
 
 test('cannot create sitemap with non-http protocol', function (): void {
-    expect(fn (): \Fkrzski\RobotsTxt\ValueObjects\Sitemap => new Sitemap('ftp://example.com/sitemap.xml'))
+    expect(fn (): Sitemap => new Sitemap('ftp://example.com/sitemap.xml'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must use HTTP(S) protocol');
 });
 
 test('cannot create sitemap with non-xml extension', function (): void {
-    expect(fn (): \Fkrzski\RobotsTxt\ValueObjects\Sitemap => new Sitemap('https://example.com/sitemap.html'))
+    expect(fn (): Sitemap => new Sitemap('https://example.com/sitemap.html'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must be in .xml format');
 });
 
