@@ -178,7 +178,7 @@ final class RobotsTxt
                 $this->globalRules = [];
             }
 
-            $this->disallow('/*');
+            $this->disallow('/');
         }
 
         return $this;

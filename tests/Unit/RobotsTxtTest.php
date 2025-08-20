@@ -356,7 +356,7 @@ test('disallowAll clears global rules and adds disallow all', function (): void 
 
     expect($robots->toString())->toBe(
         "User-agent: *\n".
-        "Disallow: /*"
+        "Disallow: /"
     );
 });
 
@@ -376,7 +376,7 @@ test('disallowAll clears only specific user agent rules', function (): void {
         "Disallow: /admin\n".
         "\n".
         "User-agent: Googlebot\n".
-        "Disallow: /*\n".
+        "Disallow: /\n".
         "\n".
         "User-agent: Bingbot\n".
         "Disallow: /secret"
@@ -394,7 +394,7 @@ test('disallowAll preserves sitemaps while clearing rules', function (): void {
 
     expect($robots->toString())->toBe(
         "User-agent: *\n".
-        "Disallow: /*\n".
+        "Disallow: /\n".
         "\n".
         "Sitemap: https://example.com/sitemap1.xml\n".
         "Sitemap: https://example.com/sitemap2.xml"
