@@ -1,3 +1,13 @@
+<p style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+<img src="./art/banner.png" alt="Fkrzski PHP Package Skeleton"/>
+<img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/fkrzski/robots-txt/master?style=for-the-badge">
+<img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/fkrzski/robots-txt?style=for-the-badge">
+<img alt="Packagist Version" src="https://img.shields.io/packagist/v/fkrzski/robots-txt?style=for-the-badge">
+<img alt="Packagist License" src="https://img.shields.io/packagist/l/fkrzski/robots-txt?style=for-the-badge">
+</p>
+
+------
+
 # PHP Robots.txt
 
 A modern, fluent PHP package for managing robots.txt rules with type safety and great developer experience.
