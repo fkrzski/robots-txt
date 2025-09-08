@@ -253,7 +253,7 @@ final class RobotsTxt
             $output[] = '';
         }
 
-        return mb_trim(implode("\n", $output), "\n");
+        return trim(implode("\n", $output), "\n");
     }
 
     /**

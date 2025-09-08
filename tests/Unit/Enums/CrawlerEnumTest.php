@@ -22,7 +22,7 @@ test('crawler enum values are non-empty strings', function (): void {
 
 test('crawler enum values do not contain whitespace at start or end', function (): void {
     foreach (CrawlerEnum::cases() as $case) {
-        expect(mb_trim($case->value))
+        expect(trim($case->value))
             ->toBe($case->value);
     }
 });

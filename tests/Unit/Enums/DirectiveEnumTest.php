@@ -27,7 +27,7 @@ test('directive enum cases are in uppercase', function (): void {
 
 test('directive enum values do not contain whitespace at start or end', function (): void {
     foreach (DirectiveEnum::cases() as $case) {
-        expect(mb_trim($case->value))
+        expect(trim($case->value))
             ->toBe($case->value);
     }
 });
