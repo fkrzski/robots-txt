@@ -1,74 +1,58 @@
 # Contributing
 
-Thank you for considering contributing to PHP Robots.txt! This document outlines the process and guidelines for contributing to the project. Please also review our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our community standards.
+Thanks for your interest in contributing to Laravel Canonical! We welcome contributions from everyone.
+
+## What can you contribute?
+
+- 🐛 **Bug fixes** - Found an issue with canonical URL generation?
+- ✨ **New features** – Ideas for improving SEO functionality?
+- 📖 **Documentation** – Help clarify our docs
+- 🧪 **Tests** – More test coverage is always welcome
+- 💡 **Ideas** – Open an issue to discuss new features
 
 ## Development Setup
 
 1. Fork the repository
-2. Clone your fork:
+2. Clone your fork: `git clone https://github.com/fkrzski/robots-txt.git`
+3. Install dependencies: `composer install`
+4. Run tests to ensure everything works: `composer test`
+5. Create a branch: `git checkout -b feature/your-feature-name`
+
+## Local Development
+
+1. Make your changes
+2. Run the full test suite:
    ```bash
-   git clone https://github.com/fkrzski/robots-txt.git
+   composer test # Run full test suite tests
    ```
-3. Install dependencies:
-   ```bash
-   composer install
-   ```
+3. Commit with clear messages
+4. Push and create PR
 
-## Development Workflow
+## Reporting Issues
 
-1. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. Make your changes and ensure all tests pass:
-   ```bash
-   composer ci
-   ```
-
-3. Commit your changes following [Conventional Commits](https://www.conventionalcommits.org/):
-   ```bash
-   feat: add new feature
-   fix: resolve specific issue
-   docs: update documentation
-   test: add or update tests
-   ```
-
-## Code Quality Standards
-
-Before submitting your PR, please ensure:
-
-1. All tests pass:
-   - Unit tests via PHPUnit/Pest
-   - Type coverage tests
-   - Mutation tests
-
-2. Code follows PSR-12 standards:
-   - Run `composer test:lint` to check code style
-   - Run `composer lint` to automatically fix style issues
-
-3. Static analysis shows no errors:
-   - Run `composer analyse` to check with PHPStan
-
-4. Rector checks pass:
-   - Run `composer test:refactor` to verify code quality
-   - Run `composer refactor` to automatically fix issues
+When reporting bugs, please include:
+- PHP version
+- Package version
+- Steps to reproduce
+- Expected vs actual canonical URLs
+- Any error messages
 
 ## Pull Request Process
 
-1. Update documentation to reflect any changes
-2. Add or update tests to cover your changes
-3. Ensure the test suite passes
-4. Update the README.md with details of changes if needed
-5. The PR will be merged once you have the sign-off of at least one maintainer
+1. Ensure tests pass and maintain good code coverage
+2. Follow the existing code style
+3. Write clear, descriptive commit messages
+4. Update documentation as needed
+5. Fill out the PR template
 
-## Questions or Problems?
+## Code of Conduct
 
-Feel free to open an issue in the repository for:
-- Bug reports
-- Feature requests
-- Questions about the codebase
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
-## License
+## Questions?
 
-By contributing to PHP Robots.txt, you agree that your contributions will be licensed under its MIT license.
+- 💬 Open a GitHub Discussion for general questions
+- 🐛 Use GitHub Issues for bugs and feature requests
+- 📧 Email filip.krzyzanowski@protonmail.com for security issues
+
+Thanks for helping make PHP package Skeleton better! 🚀
