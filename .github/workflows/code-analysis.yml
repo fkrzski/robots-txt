@@ -97,10 +97,10 @@ jobs:
       run: composer test:lint
 
     - name: Run refactor checks
-      run: composer rector:check
+      run: composer test:refactor
 
     - name: Run type checks
       run: composer analyse
 
     - name: Run type coverage tests
-      run: composer test:types
+      run: composer test:type-coverage

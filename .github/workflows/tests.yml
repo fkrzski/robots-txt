@@ -84,5 +84,8 @@ jobs:
     - name: Install Composer dependencies
       run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
 
+    - name: Check syntax
+      run: composer test:syntax
+
     - name: Run tests
-      run: composer test:mutation
+      run: composer test:unit:mutation

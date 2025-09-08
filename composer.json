@@ -51,27 +51,28 @@
         }
     },
     "scripts": {
+        "analyse": "phpstan",
         "lint": "pint",
-        "test": "pest",
+        "refactor": "rector",
         "test:lint": "pint --test",
         "test:profanity": "pest --profanity --compact",
-        "test:coverage": "pest --coverage --min=95",
-        "test:types": "pest --type-coverage --min=100",
-        "test:mutation": "pest --mutate --covered-only --min=95",
-        "test:all": [
+        "test:refactor": "rector --dry-run",
+        "test:syntax": "find . -path ./vendor -prune -o -type f -name \\\"*.php\\\" -print | xargs -P 2 -n 1 php -l",
+        "test:type-coverage": "pest --type-coverage --exactly=100 --compact",
+        "test:unit": "pest --parallel --coverage --exactly=100",
+        "test:unit:mutation": "pest --parallel --mutate --exactly=100",
+        "test": [
             "@test:profanity",
+            "@test:syntax",
             "@test:lint",
-            "@test:types",
-            "@test:coverage",
-            "@test:mutation"
-        ],
-        "analyse": "phpstan analyse",
-        "rector:check": "rector process --dry-run",
-        "rector:fix": "rector process",
-        "ci": [
-            "@test:all",
+            "@test:refactor",
             "@analyse",
-            "@rector:check"
+            "@test:type-coverage",
+            "@test:unit:mutation"
+        ],
+        "code-quality": [
+            "@lint",
+            "@refactor"
         ]
     },
     "config": {
