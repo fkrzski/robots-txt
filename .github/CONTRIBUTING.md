@@ -48,7 +48,7 @@ Before submitting your PR, please ensure:
    - Run `composer cs:fix` to automatically fix style issues
 
 3. Static analysis shows no errors:
-   - Run `composer analyse` to check with PHPStan and Psalm
+   - Run `composer analyse` to check with PHPStan
 
 4. Rector checks pass:
    - Run `composer rector:check` to verify code quality

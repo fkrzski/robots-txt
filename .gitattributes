@@ -16,7 +16,6 @@
 /LICENSE.md export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
-/psalm.xml export-ignore
 /PULL_REQUEST_TEMPLATE.md export-ignore
 /README.md export-ignore
 /rector.php export-ignore
