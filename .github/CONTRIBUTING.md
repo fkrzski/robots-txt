@@ -44,8 +44,8 @@ Before submitting your PR, please ensure:
    - Mutation tests
 
 2. Code follows PSR-12 standards:
-   - Run `composer cs:check` to check code style
-   - Run `composer cs:fix` to automatically fix style issues
+   - Run `composer test:lint` to check code style
+   - Run `composer lint` to automatically fix style issues
 
 3. Static analysis shows no errors:
    - Run `composer analyse` to check with PHPStan

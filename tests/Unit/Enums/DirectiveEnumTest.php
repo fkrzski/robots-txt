@@ -21,7 +21,7 @@ test('directive enum cases have correct string values', function (): void {
 test('directive enum cases are in uppercase', function (): void {
     foreach (DirectiveEnum::cases() as $case) {
         expect($case->name)
-            ->toBe(strtoupper($case->name));
+            ->toBe(mb_strtoupper($case->name));
     }
 });
 

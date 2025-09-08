@@ -21,37 +21,37 @@ use Override;
 final readonly class Rule implements ValueObject
 {
     /**
-     * @param DirectiveEnum $directiveEnum The directive type for this rule
-     * @param ValueObject<(string | int | CrawlerEnum)> $valueObject The value for this directive
+     * @param  DirectiveEnum  $directiveEnum  The directive type for this rule
+     * @param  ValueObject<(string | int | CrawlerEnum)>  $valueObject  The value for this directive
      */
     public function __construct(
         public DirectiveEnum $directiveEnum,
-        public ValueObject   $valueObject
+        public ValueObject $valueObject
     ) {
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function value(): string
     {
         return $this->toString();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function toString(): string
     {
         return sprintf('%s: %s', $this->directiveEnum->value, $this->valueObject->toString());
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function validate(): void
     {

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Fkrzski\RobotsTxt\ValueObjects\UserAgent;
 use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
+use Fkrzski\RobotsTxt\ValueObjects\UserAgent;
 
 mutates(UserAgent::class);
 

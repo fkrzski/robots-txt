@@ -27,28 +27,28 @@ final readonly class Sitemap implements ValueObject
         $this->validate();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function value(): string
     {
         return $this->url;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function toString(): string
     {
         return $this->url;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function validate(): void
     {
@@ -56,16 +56,16 @@ final readonly class Sitemap implements ValueObject
             throw new InvalidArgumentException('Sitemap URL cannot be empty');
         }
 
-        if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
+        if (! filter_var($this->url, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('Invalid sitemap URL format');
         }
 
         $scheme = parse_url($this->url, PHP_URL_SCHEME);
-        if (!in_array($scheme, ['http', 'https'], true)) {
+        if (! in_array($scheme, ['http', 'https'], true)) {
             throw new InvalidArgumentException('Sitemap URL must use HTTP(S) protocol');
         }
 
-        if (!str_ends_with($this->url, '.xml')) {
+        if (! str_ends_with($this->url, '.xml')) {
             throw new InvalidArgumentException('Sitemap URL must be in .xml format');
         }
     }

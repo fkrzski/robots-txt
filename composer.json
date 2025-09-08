@@ -34,7 +34,7 @@
         "php": "^8.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
+        "laravel/pint": "^v1.14",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-type-coverage": "^4.0",
         "phpstan/phpstan": "^2.0",
@@ -51,26 +51,26 @@
         }
     },
     "scripts": {
+        "lint": "pint",
         "test": "pest",
+        "test:lint": "pint --test",
         "test:profanity": "pest --profanity --compact",
         "test:coverage": "pest --coverage --min=95",
         "test:types": "pest --type-coverage --min=100",
         "test:mutation": "pest --mutate --covered-only --min=95",
         "test:all": [
             "@test:profanity",
+            "@test:lint",
             "@test:types",
             "@test:coverage",
             "@test:mutation"
         ],
-        "cs:check": "php-cs-fixer fix --dry-run",
-        "cs:fix": "php-cs-fixer fix",
         "analyse": "phpstan analyse",
         "rector:check": "rector process --dry-run",
         "rector:fix": "rector process",
         "ci": [
             "@test:all",
             "@analyse",
-            "@cs:check",
             "@rector:check"
         ]
     },

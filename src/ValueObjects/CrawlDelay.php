@@ -24,28 +24,28 @@ final readonly class CrawlDelay implements ValueObject
         $this->validate();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function value(): int
     {
         return $this->seconds;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function toString(): string
     {
         return (string) $this->seconds;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function validate(): void
     {

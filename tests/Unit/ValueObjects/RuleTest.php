@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Fkrzski\RobotsTxt\ValueObjects\Rule;
-use Fkrzski\RobotsTxt\ValueObjects\Path;
-use Fkrzski\RobotsTxt\ValueObjects\CrawlDelay;
 use Fkrzski\RobotsTxt\Enums\DirectiveEnum;
+use Fkrzski\RobotsTxt\ValueObjects\CrawlDelay;
+use Fkrzski\RobotsTxt\ValueObjects\Path;
+use Fkrzski\RobotsTxt\ValueObjects\Rule;
 
 mutates(Rule::class);
 
