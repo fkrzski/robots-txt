@@ -18,8 +18,10 @@ jobs:
       pull-requests: read
 
     outputs:
+      github: ${{ steps.filter.outputs.github }}
       src: ${{ steps.filter.outputs.src }}
       composer: ${{ steps.filter.outputs.composer }}
+      phpunit: ${{ steps.filter.outputs.phpunit }}
 
     name: Check changes
 
