@@ -131,7 +131,6 @@ final class RobotsTxt
         $this->crawlerEnum = $crawlerEnum;
 
         if (!isset($this->userAgentRules[$crawlerEnum->value])) {
-            /** @var ValueObject<CrawlerEnum|int|string> $userAgent */
             $userAgent = new UserAgent($crawlerEnum);
             $rule = new Rule(DirectiveEnum::USER_AGENT, $userAgent);
             $this->userAgentRules[$crawlerEnum->value] = [$rule];
