@@ -21,6 +21,7 @@ final readonly class UserAgent implements ValueObject
     public function __construct(
         private CrawlerEnum $crawlerEnum
     ) {
+        //
     }
 
     /** {@inheritDoc} */

@@ -34,7 +34,7 @@
         "php": "^8.3"
     },
     "require-dev": {
-        "laravel/pint": "^v1.14",
+        "laravel/pint": "^v1.7",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-type-coverage": "^4.0",
         "phpstan/phpstan": "^2.0",

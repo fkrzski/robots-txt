@@ -28,6 +28,7 @@ final readonly class Rule implements ValueObject
         public DirectiveEnum $directiveEnum,
         public ValueObject $valueObject
     ) {
+        //
     }
 
     /** {@inheritDoc} */

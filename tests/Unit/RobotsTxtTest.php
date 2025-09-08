@@ -8,13 +8,13 @@ use Fkrzski\RobotsTxt\RobotsTxt;
 mutates(RobotsTxt::class);
 
 test('can create empty robots txt', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect($robots->toString())->toBe('');
 });
 
 test('can add global rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/admin')
         ->allow('/public');
@@ -27,7 +27,7 @@ test('can add global rules', function (): void {
 });
 
 test('can add rules for specific crawler', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->disallow('/private')
@@ -43,7 +43,7 @@ test('can add rules for specific crawler', function (): void {
 });
 
 test('can mix global and specific rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/admin') // global rule
         ->userAgent(CrawlerEnum::GOOGLE)
@@ -64,7 +64,7 @@ test('can mix global and specific rules', function (): void {
 });
 
 test('can add sitemaps', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->sitemap('https://example.com/sitemap.xml')
         ->sitemap('https://example.com/news-sitemap.xml');
@@ -76,7 +76,7 @@ test('can add sitemaps', function (): void {
 });
 
 test('can use closure for user agent rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     $robots->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robotsTxt): void {
         $robotsTxt
@@ -94,7 +94,7 @@ test('can use closure for user agent rules', function (): void {
 });
 
 test('can nest multiple user agents with closures', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     $robots
         ->disallow('/admin') // global rule
@@ -124,7 +124,7 @@ test('can nest multiple user agents with closures', function (): void {
 });
 
 test('rules are added in correct order', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->allow('/first')
@@ -140,7 +140,7 @@ test('rules are added in correct order', function (): void {
 });
 
 test('switching user agent context preserves previous rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->disallow('/google')
@@ -160,7 +160,7 @@ test('switching user agent context preserves previous rules', function (): void 
 });
 
 test('can mix global rules with user agent rules and sitemaps', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/admin')
         ->sitemap('https://example.com/sitemap1.xml')
@@ -181,7 +181,7 @@ test('can mix global rules with user agent rules and sitemaps', function (): voi
 });
 
 test('empty rules sections are not included in output', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->sitemap('https://example.com/sitemap.xml')
         ->userAgent(CrawlerEnum::GOOGLE);
@@ -200,7 +200,7 @@ test('can handle multiple user agents with same rules', function (): void {
             ->allow('/public');
     };
 
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->forUserAgent(CrawlerEnum::GOOGLE, $rules)
         ->forUserAgent(CrawlerEnum::BING, $rules);
@@ -217,7 +217,7 @@ test('can handle multiple user agents with same rules', function (): void {
 });
 
 test('nested user agent closures maintain correct scope', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->disallow('/before')
@@ -245,7 +245,7 @@ test('nested user agent closures maintain correct scope', function (): void {
 });
 
 test('can handle wildcards in paths', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->userAgent(CrawlerEnum::GOOGLE)
         ->allow('/public/*')
@@ -261,56 +261,56 @@ test('can handle wildcards in paths', function (): void {
 });
 
 test('sitemap must be a valid https url', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->sitemap('not-a-url'))
         ->toThrow(InvalidArgumentException::class, 'Invalid sitemap URL format');
 });
 
 test('sitemap must use http or https protocol', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->sitemap('ftp://example.com/sitemap.xml'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must use HTTP(S) protocol');
 });
 
 test('sitemap must have xml extension', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->sitemap('https://example.com/sitemap.txt'))
         ->toThrow(InvalidArgumentException::class, 'Sitemap URL must be in .xml format');
 });
 
 test('path must start with forward slash', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->disallow('invalid/path'))
         ->toThrow(InvalidArgumentException::class, 'Path must start with forward slash (/)');
 });
 
 test('path cannot contain query parameters', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->allow('/path?query=value'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain query parameters');
 });
 
 test('path cannot contain fragments', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->disallow('/path#fragment'))
         ->toThrow(InvalidArgumentException::class, 'Path cannot contain fragments');
 });
 
 test('path cannot be empty', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
 
     expect(fn (): RobotsTxt => $robots->allow(''))
         ->toThrow(InvalidArgumentException::class, 'Path cannot be empty');
 });
 
 test('sitemaps are rendered in order of addition', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->sitemap('https://example.com/sitemap1.xml')
         ->sitemap('https://example.com/sitemap2.xml')
@@ -324,7 +324,7 @@ test('sitemaps are rendered in order of addition', function (): void {
 });
 
 test('sitemaps maintain order when mixed with other rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->sitemap('https://example.com/sitemap1.xml')
         ->userAgent(CrawlerEnum::GOOGLE)
@@ -348,7 +348,7 @@ test('sitemaps maintain order when mixed with other rules', function (): void {
 });
 
 test('disallowAll clears global rules and adds disallow all', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->allow('/public')
         ->disallow('/private')
@@ -361,7 +361,7 @@ test('disallowAll clears global rules and adds disallow all', function (): void 
 });
 
 test('disallowAll clears only specific user agent rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/admin')  // global rule
         ->userAgent(CrawlerEnum::GOOGLE)
@@ -384,7 +384,7 @@ test('disallowAll clears only specific user agent rules', function (): void {
 });
 
 test('disallowAll preserves sitemaps while clearing rules', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->allow('/public')
         ->sitemap('https://example.com/sitemap1.xml')
@@ -402,7 +402,7 @@ test('disallowAll preserves sitemaps while clearing rules', function (): void {
 });
 
 test('disallowAll with false parameter does nothing', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/private')
         ->disallowAll(false);
@@ -420,7 +420,7 @@ test('toFile saves robots.txt content to default location', function (): void {
     try {
         chdir($tempDir);
 
-        $robots = new RobotsTxt();
+        $robots = new RobotsTxt;
         $robots
             ->disallow('/admin')
             ->allow('/public');
@@ -441,7 +441,7 @@ test('toFile saves robots.txt content to custom location', function (): void {
     $tempFile = tempnam(sys_get_temp_dir(), 'robots_');
     unlink($tempFile); // Remove the file to test creation
 
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $robots
         ->disallow('/admin')
         ->allow('/public');
@@ -460,7 +460,7 @@ test('toFile throws exception when directory exists but is not writable', functi
     mkdir($tempDir, 0o444); // Read-only directory
 
     try {
-        $robots = new RobotsTxt();
+        $robots = new RobotsTxt;
         expect(fn (): bool => $robots->toFile($tempDir.'/robots.txt'))
             ->toThrow(RuntimeException::class, 'Directory is not writable');
     } finally {
@@ -470,7 +470,7 @@ test('toFile throws exception when directory exists but is not writable', functi
 });
 
 test('toFile throws exception when directory does not exist', function (): void {
-    $robots = new RobotsTxt();
+    $robots = new RobotsTxt;
     $nonexistentPath = sys_get_temp_dir().'/nonexistent_'.uniqid().'/robots.txt';
 
     expect(fn (): bool => $robots->toFile($nonexistentPath))
@@ -482,7 +482,7 @@ test('toFile throws exception when existing robots.txt file is not writable', fu
     chmod($tempFile, 0o444); // Make read-only
 
     try {
-        $robots = new RobotsTxt();
+        $robots = new RobotsTxt;
         expect(fn (): bool => $robots->toFile($tempFile))
             ->toThrow(RuntimeException::class, 'Existing robots.txt file is not writable');
     } finally {
