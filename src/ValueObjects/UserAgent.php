@@ -21,30 +21,31 @@ final readonly class UserAgent implements ValueObject
     public function __construct(
         private CrawlerEnum $crawlerEnum
     ) {
+        //
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function value(): CrawlerEnum
     {
         return $this->crawlerEnum;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function toString(): string
     {
         return $this->crawlerEnum->value;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function validate(): void
     {

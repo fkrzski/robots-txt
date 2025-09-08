@@ -54,7 +54,7 @@ final class RobotsTxt
     /**
      * Allows access to a specific path.
      *
-     * @param string $path Path to allow
+     * @param  string  $path  Path to allow
      *
      * @throws InvalidArgumentException If path format is invalid
      */
@@ -66,7 +66,7 @@ final class RobotsTxt
     /**
      * Prevents access to a specific path.
      *
-     * @param string $path Path to disallow
+     * @param  string  $path  Path to disallow
      *
      * @throws InvalidArgumentException If path format is invalid
      */
@@ -78,7 +78,7 @@ final class RobotsTxt
     /**
      * Sets the crawl delay for the current context.
      *
-     * @param int $seconds Delay in seconds (must be non-negative)
+     * @param  int  $seconds  Delay in seconds (must be non-negative)
      *
      * @throws InvalidArgumentException If seconds is negative
      */
@@ -102,8 +102,8 @@ final class RobotsTxt
      * });
      * ```
      *
-     * @param CrawlerEnum $crawlerEnum The crawler to apply rules to
-     * @param Closure(RobotsTxt): void $rules Closure containing the rules
+     * @param  CrawlerEnum  $crawlerEnum  The crawler to apply rules to
+     * @param  Closure(RobotsTxt): void  $rules  Closure containing the rules
      */
     public function forUserAgent(CrawlerEnum $crawlerEnum, Closure $rules): self
     {
@@ -124,13 +124,13 @@ final class RobotsTxt
      * All rules added after this call will apply to this user agent
      * until another user agent is set or rules are added to the global context.
      *
-     * @param CrawlerEnum $crawlerEnum The crawler to set as current context
+     * @param  CrawlerEnum  $crawlerEnum  The crawler to set as current context
      */
     public function userAgent(CrawlerEnum $crawlerEnum): self
     {
         $this->crawlerEnum = $crawlerEnum;
 
-        if (!isset($this->userAgentRules[$crawlerEnum->value])) {
+        if (! isset($this->userAgentRules[$crawlerEnum->value])) {
             $userAgent = new UserAgent($crawlerEnum);
             $rule = new Rule(DirectiveEnum::USER_AGENT, $userAgent);
             $this->userAgentRules[$crawlerEnum->value] = [$rule];
@@ -142,7 +142,7 @@ final class RobotsTxt
     /**
      * Adds a sitemap URL to the robots.txt file.
      *
-     * @param string $url URL of the sitemap (must be valid HTTP(S) URL ending in .xml)
+     * @param  string  $url  URL of the sitemap (must be valid HTTP(S) URL ending in .xml)
      *
      * @throws InvalidArgumentException If URL format is invalid
      */
@@ -162,9 +162,9 @@ final class RobotsTxt
      * When disallowing ($disallow = true), it clears all existing rules for the current context
      * and adds a single "Disallow: /*" rule.
      *
-     * @param bool $disallow If true, disallows all paths and clears other rules. If false, allows all paths.
-     *
+     * @param  bool  $disallow  If true, disallows all paths and clears other rules. If false, allows all paths.
      * @return self For method chaining
+     *
      * @throws InvalidArgumentException If path format is invalid
      */
     public function disallowAll(bool $disallow = true): self
@@ -189,25 +189,25 @@ final class RobotsTxt
      * If no path is provided, saves to robots.txt in the project root directory.
      * Throws an exception if the file cannot be written or the directory is not writable.
      *
-     * @param string|null $path Optional custom path where the file should be saved
-     *
+     * @param  string|null  $path  Optional custom path where the file should be saved
      * @return bool True if the file was successfully written
+     *
      * @throws RuntimeException If the file cannot be written
      */
     public function toFile(?string $path = null): bool
     {
         $filePath = $path ?? (getcwd() ?: __DIR__).'/robots.txt';
 
-        if (file_exists($filePath) && !is_writable($filePath)) {
+        if (file_exists($filePath) && ! is_writable($filePath)) {
             throw new RuntimeException('Existing robots.txt file is not writable');
         }
 
         $directory = dirname($filePath);
-        if (!is_dir($directory) || !is_writable($directory)) {
+        if (! is_dir($directory) || ! is_writable($directory)) {
             throw new RuntimeException('Directory is not writable');
         }
 
-        return (bool)file_put_contents($filePath, $this->toString());
+        return (bool) file_put_contents($filePath, $this->toString());
     }
 
     /**
@@ -245,7 +245,6 @@ final class RobotsTxt
             $output[] = '';
         }
 
-
         if ($this->sitemaps !== []) {
             foreach ($this->sitemaps as $sitemap) {
                 $output[] = $sitemap->toString();
@@ -262,16 +261,15 @@ final class RobotsTxt
      *
      * @template T of string|int|CrawlerEnum
      *
-     * @param DirectiveEnum $directiveEnum The type of rule to add
-     * @param ValueObject<T> $valueObject The value for the rule
-     *
+     * @param  DirectiveEnum  $directiveEnum  The type of rule to add
+     * @param  ValueObject<T>  $valueObject  The value for the rule
      * @return self For method chaining
      */
     private function addRule(DirectiveEnum $directiveEnum, ValueObject $valueObject): self
     {
         $rule = new Rule($directiveEnum, $valueObject);
 
-        if (!$this->crawlerEnum instanceof CrawlerEnum) {
+        if (! $this->crawlerEnum instanceof CrawlerEnum) {
             $this->globalRules[] = $rule;
         } else {
             $this->userAgentRules[$this->crawlerEnum->value][] = $rule;

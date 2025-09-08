@@ -21,6 +21,7 @@ jobs:
       github: ${{ steps.filter.outputs.github }}
       src: ${{ steps.filter.outputs.src }}
       composer: ${{ steps.filter.outputs.composer }}
+      pint: ${{ steps.filter.outputs.pint }}
       phpstan: ${{ steps.filter.outputs.phpstan }}
       rector: ${{ steps.filter.outputs.rector }}
 
@@ -42,6 +43,8 @@ jobs:
             - 'tests/**'
           composer:
             - 'composer.json'
+          pint:
+            - 'pint.json'
           phpstan:
             - 'phpstan.neon.dist'
           rector:
@@ -91,7 +94,7 @@ jobs:
       run: composer test:profanity
 
     - name: Run code linting checks
-      run: composer cs:check
+      run: composer test:lint
 
     - name: Run refactor checks
       run: composer rector:check

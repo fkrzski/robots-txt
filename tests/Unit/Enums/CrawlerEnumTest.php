@@ -46,7 +46,7 @@ test('crawler enum values contain only allowed special characters', function ():
 test('crawler enum cases are in uppercase', function (): void {
     foreach (CrawlerEnum::cases() as $case) {
         expect($case->name)
-            ->toBe(strtoupper($case->name));
+            ->toBe(mb_strtoupper($case->name));
     }
 });
 

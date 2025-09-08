@@ -15,6 +15,7 @@ use InvalidArgumentException;
  * and are compared based on their values rather than their identity.
  *
  * @template-covariant T The type of the value stored in the value object
+ *
  * @since 1.0.0
  */
 interface ValueObject
@@ -48,8 +49,7 @@ interface ValueObject
      * and their values are equal. This is different from identity
      * comparison (===) which compares object references.
      *
-     * @param ValueObject<mixed> $valueObject The value object to compare with
-     *
+     * @param  ValueObject<mixed>  $valueObject  The value object to compare with
      * @return bool True if the value objects are equal, false otherwise
      */
     public function equals(self $valueObject): bool;

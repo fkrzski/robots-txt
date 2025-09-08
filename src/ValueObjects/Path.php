@@ -28,28 +28,28 @@ final readonly class Path implements ValueObject
         $this->validate();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function value(): string
     {
         return $this->path;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function toString(): string
     {
         return $this->path;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function equals(ValueObject $valueObject): bool
     {
         return $this->value() === $valueObject->value();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     #[Override]
     public function validate(): void
     {
@@ -57,7 +57,7 @@ final readonly class Path implements ValueObject
             throw new InvalidArgumentException('Path cannot be empty');
         }
 
-        if (!str_starts_with($this->path, '/')) {
+        if (! str_starts_with($this->path, '/')) {
             throw new InvalidArgumentException('Path must start with forward slash (/)');
         }
 
