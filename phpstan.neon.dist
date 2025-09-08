@@ -2,7 +2,5 @@ parameters:
     level: max
     paths:
         - src
-    checkMissingIterableValueType: true
-    checkGenericClassInNonGenericObjectType: true
     checkImplicitMixed: true
     checkUnionTypes: true
