@@ -1,8 +1,16 @@
 ## Description
 
-Fixes # (issue)
+Provide a clear description of what this PR does and why it's necessary.
 
-// Please include a summary of the change and which issue is fixed. List any dependencies that are required for this change.
+**What does this PR do?**
+
+<!-- Explain the **details** of your change. What is the problem it solves? -->
+
+**Why is this change needed?**
+
+<!-- Explain the reason for the change. What existing problem does the pull request solve? -->
+
+**Any related issues?** (closes #123)
 
 ## Type of change
 
@@ -11,17 +19,16 @@ Fixes # (issue)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 
-## Checklist:
+## Testing
 
-- [ ] My code follows the code style of this project
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] All new and existing tests passed
-- [ ] I have updated the documentation accordingly
-- [ ] I have checked my code and corrected any misspellings
-- [ ] I have performed a self-review of my own code
-- [ ] My changes generate no new warnings
-- [ ] Type declarations are complete and accurate
+- [ ] Test suite pass (`composer test`)
+- [ ] Manual testing with different URL scenarios completed
+
+## Backward Compatibility
+
+- [ ] No breaking changes to the public code
+- [ ] Changes do not introduce performance regressions
 
 ## Additional Notes
 
-// Add any additional notes, concerns, or context about the pull request here.
+<!--Add any additional notes, concerns, or context about the pull request here. -->

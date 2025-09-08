@@ -367,29 +367,87 @@ These validations ensure that the generated robots.txt file is always valid and 
 
 The project includes several command groups for testing and code quality:
 
-### Run all tests and checks
-
+### Code Quality & Formatting
 ```bash
-composer ci
-```
+# Run profanity checks
+composer test:profanity
 
-This command runs:
-- Type coverage tests
-- Test coverage analysis
-- Mutation tests
-- Static analysis (PHPStan)
-- Code style checks
-- Rector checks
-
-### Run code analysis
-
-```bash
+# Run static analysis with PHPStan
 composer analyse
+
+# Format code with Laravel Pint
+composer lint
+
+# Check code formatting (without fixing)
+composer test:lint
+
+# Run automated refactoring with Rector
+composer refactor
+
+# Check refactor suggestions (dry-run)
+composer test:refactor
+
+# Check type coverage (100% required)
+composer test:type-coverage
 ```
 
-This command runs:
-- PHPStan static analysis
+### Testing
 
-## License
+```bash
+# Check PHP syntax
+composer test:syntax
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+# Run unit tests with coverage
+composer test:unit
+
+# Run mutation testing
+composer test:unit:mutation
+```
+
+### Complete Test Suite
+
+```bash
+# Run all tests and quality checks
+composer test
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details on:
+
+- Setting up the development environment
+- Running tests
+- Submitting pull requests
+- Code style guidelines
+- Reporting issues
+
+### Quick Contribution Setup
+
+1. Fork this repository
+2. Clone your fork: `git clone https://github.com/yourusername/php-package-skeleton.git`
+3. Install dependencies: `composer install`
+4. Create a feature branch: `git checkout -b feature/amazing-feature`
+5. Make your changes and run tests: `composer test`
+6. Submit a pull request
+
+## 📜 License
+
+This project is open-sourced software licensed under the [MIT License](LICENSE.md).
+
+## 👨‍💻 Author
+
+**PHP Package Skeleton** was created by [Filip Krzyżanowski](https://linkedin.com/in/fkrzski).
+
+## 🙏 Acknowledgments
+
+Special thanks to the amazing PHP community and the maintainers of:
+- [Laravel Pint](https://laravel.com/docs/pint)
+- [PEST PHP](https://pestphp.com/)
+- [PHPStan](https://phpstan.org/)
+- [Rector](https://getrector.org/)
+
+---
+
+<p align="center">
+<strong>Happy coding! 🚀</strong>
+</p>
