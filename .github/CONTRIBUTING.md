@@ -51,8 +51,8 @@ Before submitting your PR, please ensure:
    - Run `composer analyse` to check with PHPStan
 
 4. Rector checks pass:
-   - Run `composer rector:check` to verify code quality
-   - Run `composer rector:fix` to automatically fix issues
+   - Run `composer test:refactor` to verify code quality
+   - Run `composer refactor` to automatically fix issues
 
 ## Pull Request Process
 

@@ -381,17 +381,6 @@ This command runs:
 - Code style checks
 - Rector checks
 
-### Run all tests
-
-```bash
-composer test:all
-```
-
-This command runs:
-- Type coverage tests (`test:types`)
-- Test coverage analysis (`test:coverage`)
-- Mutation tests (`test:mutation`)
-
 ### Run code analysis
 
 ```bash
