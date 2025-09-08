@@ -14,7 +14,7 @@
 /composer.lock export-ignore
 /CONTRIBUTING.md export-ignore
 /LICENSE.md export-ignore
-/phpstan.neon export-ignore
+/phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
 /psalm.xml export-ignore
 /PULL_REQUEST_TEMPLATE.md export-ignore

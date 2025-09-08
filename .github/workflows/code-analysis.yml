@@ -43,7 +43,7 @@ jobs:
           composer:
             - 'composer.json'
           phpstan:
-            - 'phpstan.neon'
+            - 'phpstan.neon.dist'
           rector:
             - 'rector.php'
 
