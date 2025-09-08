@@ -377,7 +377,7 @@ This command runs:
 - Type coverage tests
 - Test coverage analysis
 - Mutation tests
-- Static analysis (PHPStan & Psalm)
+- Static analysis (PHPStan)
 - Code style checks
 - Rector checks
 
@@ -400,7 +400,6 @@ composer analyse
 
 This command runs:
 - PHPStan static analysis
-- Psalm static analysis
 
 ## License
 
