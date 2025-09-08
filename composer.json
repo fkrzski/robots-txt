@@ -35,8 +35,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
-        "pestphp/pest": "^3.3",
-        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
         "phpstan/phpstan": "^2.0",
         "rector/rector": "^2.1.2"
     },
@@ -52,10 +52,12 @@
     },
     "scripts": {
         "test": "pest",
+        "test:profanity": "pest --profanity --compact",
         "test:coverage": "pest --coverage --min=95",
         "test:types": "pest --type-coverage --min=100",
         "test:mutation": "pest --mutate --covered-only --min=95",
         "test:all": [
+            "@test:profanity",
             "@test:types",
             "@test:coverage",
             "@test:mutation"
