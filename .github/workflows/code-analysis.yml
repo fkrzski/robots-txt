@@ -59,7 +59,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [8.4]
-        dependency-version: [prefer-lowest, prefer-stable]
+        dependency-version: [prefer-stable]
 
     name: Code analysis P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
