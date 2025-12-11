@@ -14,7 +14,7 @@ A modern, fluent PHP package for managing robots.txt rules with type safety and 
 
 ## Requirements
 
-- PHP 8.3 or higher
+- PHP 8.4 or higher
 - Code coverage driver
 
 ## Installation
