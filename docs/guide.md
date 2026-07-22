@@ -148,5 +148,5 @@ $robots->toFile('/var/www/html/robots.txt'); // custom path
 It returns `true` on success and throws a `RuntimeException` when the target
 directory does not exist, or the directory or an existing file is not writable.
 
-See the [API reference](./api-reference) for the per-method details and the
+See the [API reference](https://docs.fkrzski.dev/robots-txt/api-reference) for the per-method details and the
 full validation rules.
