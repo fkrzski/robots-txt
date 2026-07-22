@@ -62,9 +62,9 @@ Rules added before any `userAgent()` call apply to every crawler and render unde
 
 ## Where to next
 
-- **[Guide](./guide.md)** — how global and crawler-specific rules compose, how the
+- **[Guide](./guide)** — how global and crawler-specific rules compose, how the
   output is ordered, and how to write the file to disk.
-- **[API reference](./api-reference.md)** — every method with its signature,
+- **[API reference](./api-reference)** — every method with its signature,
   validation rules, and verified output.
-- **[Crawlers](./crawlers.md)** — the full `CrawlerEnum` list mapped to official
+- **[Crawlers](./crawlers)** — the full `CrawlerEnum` list mapped to official
   user-agent strings.

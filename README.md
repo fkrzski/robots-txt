@@ -10,446 +10,80 @@
 
 # PHP Robots.txt
 
-A modern, fluent PHP package for managing robots.txt rules with type safety and great developer experience.
+A modern, fluent PHP package for building valid `robots.txt` files with type-safe
+crawlers and fail-fast validation. Invalid paths, sitemap URLs, or crawl delays
+throw a clear exception as you build — never a broken file at render time.
 
 ## Requirements
 
 - PHP 8.4 or higher
-- Code coverage driver
+- A code coverage driver (development only)
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require fkrzski/robots-txt
 ```
 
+## Quick start
+
+Chain rules and render the result with `toString()`:
+
+```php
+use Fkrzski\RobotsTxt\RobotsTxt;
+
+$robots = new RobotsTxt();
+
+echo $robots
+    ->disallow('/admin')
+    ->allow('/public')
+    ->crawlDelay(5)
+    ->toString();
+```
+
+```text
+User-agent: *
+Disallow: /admin
+Allow: /public
+Crawl-delay: 5
+```
+
+Target a specific crawler with `userAgent()` (or the closure-based
+`forUserAgent()`), and write the file to disk with `toFile()`:
+
+```php
+use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
+
+(new RobotsTxt())
+    ->disallow('/admin')
+    ->sitemap('https://example.com/sitemap.xml')
+    ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
+        $robots->disallow('/private')->crawlDelay(10);
+    })
+    ->toFile(); // writes ./robots.txt
+```
+
 ## Documentation
 
-Full documentation is hosted at **[docs.fkrzski.dev/robots-txt](https://docs.fkrzski.dev/robots-txt)** — overview, guide, API reference, and the crawler list. The essentials are summarized below.
+Full documentation is hosted at **[docs.fkrzski.dev/robots-txt](https://docs.fkrzski.dev/robots-txt)**:
 
-The `RobotsTxt` class provides a fluent, chainable interface for creating robots.txt rules with type safety and fail-fast validation.
+- **[Guide](https://docs.fkrzski.dev/robots-txt/guide)** — how global and crawler-specific rules compose, output order, and writing to disk.
+- **[API reference](https://docs.fkrzski.dev/robots-txt/api-reference)** — every method with its signature, validation rules, and verified output.
+- **[Crawlers](https://docs.fkrzski.dev/robots-txt/crawlers)** — the full `CrawlerEnum` list mapped to official user-agent strings.
 
-### Basic Methods
+## Contributing
 
-#### Constructor
-
-Creates a new instance of the RobotsTxt class.
-
-```php
-$robots = new RobotsTxt();
-```
-
-Output:
-```
-// Empty output - no rules defined yet
-```
-
-#### allow(string $path)
-
-Adds an Allow rule for the specified path. The path must:
-- Start with a forward slash (/)
-- Not contain query parameters
-- Not contain fragments
-- Not be empty
-
-```php
-$robots = new RobotsTxt();
-$robots->allow('/public');
-```
-
-Output:
-```
-User-agent: *
-Allow: /public
-```
-
-#### disallow(string $path)
-
-Adds a Disallow rule for the specified path. Has the same path requirements as `allow()`.
-
-```php
-$robots = new RobotsTxt();
-$robots->disallow('/private');
-```
-
-Output:
-```
-User-agent: *
-Disallow: /private
-```
-
-#### crawlDelay(int $seconds)
-
-Sets the crawl delay in seconds. The delay value must be non-negative.
-
-```php
-$robots = new RobotsTxt();
-$robots->crawlDelay(10);
-```
-
-Output:
-```
-User-agent: *
-Crawl-delay: 10
-```
-
-#### sitemap(string $url)
-
-Adds a Sitemap URL. The URL must:
-- Be a valid URL
-- Use HTTP or HTTPS protocol
-- Have an .xml extension
-
-```php
-$robots = new RobotsTxt();
-$robots->sitemap('https://example.com/sitemap.xml');
-```
-
-Output:
-```
-Sitemap: https://example.com/sitemap.xml
-```
-
-#### disallowAll(bool $disallow = true)
-
-A convenience method for quickly blocking access to the entire site. When `$disallow` is true (default):
-- Clears all existing rules in the current context (global or user-agent specific)
-- Adds a single "Disallow: /" rule
-- Preserves sitemap entries and rules for other user agents
-
-```php
-// Block everything globally
-$robots = new RobotsTxt();
-$robots
-    ->allow('/public')    // This will be cleared
-    ->disallow('/admin')  // This will be cleared
-    ->disallowAll();     // Only Disallow: / remains
-```
-
-Output:
-```
-User-agent: *
-Disallow: /
-```
-
-Block access only for specific crawler:
-```php
-$robots = new RobotsTxt();
-$robots
-    ->disallow('/admin')          // Global rule - keeps
-    ->userAgent(CrawlerEnum::GOOGLE)
-    ->allow('/public')            // Google rule - cleared
-    ->disallow('/private')        // Google rule - cleared
-    ->disallowAll()               // Only Disallow: / for Google
-    ->userAgent(CrawlerEnum::BING)
-    ->disallow('/secret');        // Bing rule - keeps
-```
-
-Output:
-```
-User-agent: *
-Disallow: /admin
-
-User-agent: Googlebot
-Disallow: /
-
-User-agent: Bingbot
-Disallow: /secret
-```
-
-When `$disallow` is false, the method does nothing.
-
-#### userAgent(CrawlerEnum $crawler)
-
-Sets the context for subsequent rules to apply to a specific crawler.
-
-```php
-$robots = new RobotsTxt();
-$robots->userAgent(CrawlerEnum::GOOGLE);
-```
-
-Output:
-```
-User-agent: Googlebot
-```
-
-### Combining Methods
-
-#### Basic Rule Combinations
-
-You can chain multiple rules together:
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->disallow('/admin')
-    ->allow('/public')
-    ->crawlDelay(5);
-```
-
-Output:
-```
-User-agent: *
-Disallow: /admin
-Allow: /public
-Crawl-delay: 5
-```
-
-#### Crawler-Specific Rules
-
-You can set rules for specific crawlers:
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->userAgent(CrawlerEnum::GOOGLE)
-    ->disallow('/private')
-    ->allow('/public')
-    ->crawlDelay(10);
-```
-
-Output:
-```
-User-agent: Googlebot
-Disallow: /private
-Allow: /public
-Crawl-delay: 10
-```
-
-#### Multiple Crawlers
-
-You can define rules for multiple crawlers:
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->userAgent(CrawlerEnum::GOOGLE)
-    ->disallow('/google-private')
-    ->userAgent(CrawlerEnum::BING)
-    ->disallow('/bing-private');
-```
-
-Output:
-```
-User-agent: Googlebot
-Disallow: /google-private
-
-User-agent: Bingbot
-Disallow: /bing-private
-```
-
-#### Using forUserAgent()
-
-The `forUserAgent()` method provides a closure-based syntax for grouping crawler-specific rules:
-
-```php
-$robots = new RobotsTxt();
-$robots->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
-    $robots
-        ->disallow('/private')
-        ->allow('/public')
-        ->crawlDelay(10);
-});
-```
-
-Output:
-```
-User-agent: Googlebot
-Disallow: /private
-Allow: /public
-Crawl-delay: 10
-```
-
-#### Complex Example
-
-Combining global rules, multiple crawlers, and sitemaps:
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->disallow('/admin')  // Global rule
-    ->sitemap('https://example.com/sitemap1.xml')
-    ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
-        $robots
-            ->disallow('/google-private')
-            ->allow('/public/*');
-    })
-    ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robots): void {
-        $robots
-            ->disallow('/bing-private')
-            ->crawlDelay(5);
-    })
-    ->sitemap('https://example.com/sitemap2.xml');
-```
-
-Output:
-```
-User-agent: *
-Disallow: /admin
-
-User-agent: Googlebot
-Disallow: /google-private
-Allow: /public/*
-
-User-agent: Bingbot
-Disallow: /bing-private
-Crawl-delay: 5
-
-Sitemap: https://example.com/sitemap1.xml
-Sitemap: https://example.com/sitemap2.xml
-```
-
-### Working with Wildcards
-
-The library supports wildcards in paths:
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->disallow('/*.php')    // Block all PHP files
-    ->allow('/public/*')    // Allow all under public
-    ->disallow('/private/$'); // Exact match for /private/
-```
-
-Output:
-```
-User-agent: *
-Disallow: /*.php
-Allow: /public/*
-Disallow: /private/$
-```
-
-#### toFile(?string $path = null)
-
-Saves the robots.txt content to a file. If no path is provided, saves to `robots.txt` in the project root directory.
-
-```php
-$robots = new RobotsTxt();
-$robots
-    ->disallow('/admin')
-    ->allow('/public');
-
-// Save to default location (project root)
-$robots->toFile();
-
-// Save to custom location
-$robots->toFile('/var/www/html/robots.txt');
-```
-
-The method will throw a `RuntimeException` if:
-- The target directory doesn't exist or isn't writable
-- The existing robots.txt file isn't writable
-
-Returns `true` if the file was successfully written.
-
-### Best Practices
-
-1. **Start with Global Rules**: Define global rules before crawler-specific rules for better organization.
-2. **Group Related Rules**: Use the `forUserAgent()` method to group rules for the same crawler.
-3. **Use Wildcards Carefully**: Be precise with wildcard patterns to avoid unintended matches.
-4. **Order Matters**: More specific rules should come before more general ones.
-5. **Validate Paths**: Always ensure paths start with a forward slash and don't contain query parameters or fragments.
-
-### Error Handling
-
-The class will throw `InvalidArgumentException` in the following cases:
-
-- Path doesn't start with forward slash
-- Path contains query parameters or fragments
-- Path is empty
-- Sitemap URL is invalid or not HTTP/HTTPS
-- Sitemap URL doesn't end with .xml
-- Crawl delay is negative
-
-These validations ensure that the generated robots.txt file is always valid and follows the standard format.
-
-## Testing and Development
-
-The project includes several command groups for testing and code quality:
-
-### Code Quality & Formatting
-```bash
-# Run profanity checks
-composer test:profanity
-
-# Run static analysis with PHPStan
-composer analyse
-
-# Format code with Laravel Pint
-composer lint
-
-# Check code formatting (without fixing)
-composer test:lint
-
-# Run automated refactoring with Rector
-composer refactor
-
-# Check refactor suggestions (dry-run)
-composer test:refactor
-
-# Check type coverage (100% required)
-composer test:type-coverage
-```
-
-### Testing
+Contributions are welcome — see the [Contributing Guide](.github/CONTRIBUTING.md).
+Run the full test and quality suite with:
 
 ```bash
-# Check PHP syntax
-composer test:syntax
-
-# Run unit tests with coverage
-composer test:unit
-
-# Run mutation testing
-composer test:unit:mutation
-```
-
-### Complete Test Suite
-
-```bash
-# Run all tests and quality checks
 composer test
 ```
 
-## 🤝 Contributing
+## License
 
-We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTING.md) for details on:
+Open-sourced software licensed under the [MIT License](LICENSE.md).
 
-- Setting up the development environment
-- Running tests
-- Submitting pull requests
-- Code style guidelines
-- Reporting issues
-
-### Quick Contribution Setup
-
-1. Fork this repository
-2. Clone your fork: `git clone https://github.com/yourusername/robots-txt.git`
-3. Install dependencies: `composer install`
-4. Create a feature branch: `git checkout -b feature/amazing-feature`
-5. Make your changes and run tests: `composer test`
-6. Submit a pull request
-
-## 📜 License
-
-This project is open-sourced software licensed under the [MIT License](LICENSE.md).
-
-## 👨‍💻 Author
+## Author
 
 **PHP Robots.txt** was created by [Filip Krzyżanowski](https://linkedin.com/in/fkrzski).
-
-## 🙏 Acknowledgments
-
-Special thanks to the amazing PHP community and the maintainers of:
-- [Laravel Pint](https://laravel.com/docs/pint)
-- [PEST PHP](https://pestphp.com/)
-- [PHPStan](https://phpstan.org/)
-- [Rector](https://getrector.org/)
-
----
-
-<p align="center">
-<strong>Happy coding! 🚀</strong>
-</p>
