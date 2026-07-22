@@ -65,11 +65,11 @@ use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
 
 ## Documentation
 
-Full documentation is hosted at **[docs.fkrzski.dev/robots-txt](https://docs.fkrzski.dev/robots-txt)**:
+Full documentation is hosted at **[docs.fkrzski.dev/robots-txt](./robots-txt)**:
 
-- **[Guide](https://docs.fkrzski.dev/robots-txt/guide)** — how global and crawler-specific rules compose, output order, and writing to disk.
-- **[API reference](https://docs.fkrzski.dev/robots-txt/api-reference)** — every method with its signature, validation rules, and verified output.
-- **[Crawlers](https://docs.fkrzski.dev/robots-txt/crawlers)** — the full `CrawlerEnum` list mapped to official user-agent strings.
+- **[Guide](./robots-txt/guide)** — how global and crawler-specific rules compose, output order, and writing to disk.
+- **[API reference](./robots-txt/api-reference)** — every method with its signature, validation rules, and verified output.
+- **[Crawlers](./robots-txt/crawlers)** — the full `CrawlerEnum` list mapped to official user-agent strings.
 
 ## Contributing
 
