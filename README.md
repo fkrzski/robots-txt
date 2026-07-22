@@ -1,5 +1,5 @@
 <p style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-<img src="./art/banner.png" alt="Fkrzski PHP Package Skeleton"/>
+<img src="./art/banner.png" alt="PHP Robots.txt"/>
 <img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/fkrzski/robots-txt/master?style=for-the-badge">
 <img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/fkrzski/robots-txt?style=for-the-badge">
 <img alt="Packagist Version" src="https://img.shields.io/packagist/v/fkrzski/robots-txt?style=for-the-badge">
@@ -27,7 +27,9 @@ composer require fkrzski/robots-txt
 
 ## Documentation
 
-The `RobotsTxt` class provides a fluent interface for creating and managing robots.txt rules with type safety and immutability.
+Full documentation is hosted at **[docs.fkrzski.dev/robots-txt](https://docs.fkrzski.dev/robots-txt)** — overview, guide, API reference, and the crawler list. The essentials are summarized below.
+
+The `RobotsTxt` class provides a fluent, chainable interface for creating robots.txt rules with type safety and fail-fast validation.
 
 ### Basic Methods
 
@@ -114,7 +116,7 @@ Sitemap: https://example.com/sitemap.xml
 
 A convenience method for quickly blocking access to the entire site. When `$disallow` is true (default):
 - Clears all existing rules in the current context (global or user-agent specific)
-- Adds a single "Disallow: /*" rule
+- Adds a single "Disallow: /" rule
 - Preserves sitemap entries and rules for other user agents
 
 ```php
@@ -123,13 +125,13 @@ $robots = new RobotsTxt();
 $robots
     ->allow('/public')    // This will be cleared
     ->disallow('/admin')  // This will be cleared
-    ->disallowAll();     // Only Disallow: /* remains
+    ->disallowAll();     // Only Disallow: / remains
 ```
 
 Output:
 ```
 User-agent: *
-Disallow: /*
+Disallow: /
 ```
 
 Block access only for specific crawler:
@@ -140,7 +142,7 @@ $robots
     ->userAgent(CrawlerEnum::GOOGLE)
     ->allow('/public')            // Google rule - cleared
     ->disallow('/private')        // Google rule - cleared
-    ->disallowAll()               // Only Disallow: /* for Google
+    ->disallowAll()               // Only Disallow: / for Google
     ->userAgent(CrawlerEnum::BING)
     ->disallow('/secret');        // Bing rule - keeps
 ```
@@ -151,7 +153,7 @@ User-agent: *
 Disallow: /admin
 
 User-agent: Googlebot
-Disallow: /*
+Disallow: /
 
 User-agent: Bingbot
 Disallow: /secret
@@ -424,7 +426,7 @@ We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTI
 ### Quick Contribution Setup
 
 1. Fork this repository
-2. Clone your fork: `git clone https://github.com/yourusername/php-package-skeleton.git`
+2. Clone your fork: `git clone https://github.com/yourusername/robots-txt.git`
 3. Install dependencies: `composer install`
 4. Create a feature branch: `git checkout -b feature/amazing-feature`
 5. Make your changes and run tests: `composer test`
@@ -436,7 +438,7 @@ This project is open-sourced software licensed under the [MIT License](LICENSE.m
 
 ## 👨‍💻 Author
 
-**PHP Package Skeleton** was created by [Filip Krzyżanowski](https://linkedin.com/in/fkrzski).
+**PHP Robots.txt** was created by [Filip Krzyżanowski](https://linkedin.com/in/fkrzski).
 
 ## 🙏 Acknowledgments
 
