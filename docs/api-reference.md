@@ -244,24 +244,24 @@ be built. Bad paths, sitemaps, and crawl delays throw an
 
 Applies to `allow()` and `disallow()`. A path must:
 
-| Requirement                | Exception message                            |
-| -------------------------- | -------------------------------------------- |
-| Not be empty               | `Path cannot be empty`                       |
-| Start with `/`             | `Path must start with forward slash (/)`     |
-| No query string (`?`)      | `Path cannot contain query parameters`       |
-| No fragment (`#`)          | `Path cannot contain fragments`              |
-| No whitespace              | `Path cannot contain whitespace`             |
+| Requirement           | Exception message                        |
+| --------------------- | ---------------------------------------- |
+| Not be empty          | `Path cannot be empty`                   |
+| Start with `/`        | `Path must start with forward slash (/)` |
+| No query string (`?`) | `Path cannot contain query parameters`   |
+| No fragment (`#`)     | `Path cannot contain fragments`          |
+| No whitespace         | `Path cannot contain whitespace`         |
 
 ### Sitemap validation
 
 Applies to `sitemap()`. A URL must:
 
-| Requirement                | Exception message                            |
-| -------------------------- | -------------------------------------------- |
-| Not be empty               | `Sitemap URL cannot be empty`                |
-| Be a valid URL             | `Invalid sitemap URL format`                 |
-| Use `http` or `https`      | `Sitemap URL must use HTTP(S) protocol`      |
-| End with `.xml`            | `Sitemap URL must be in .xml format`         |
+| Requirement           | Exception message                       |
+| --------------------- | --------------------------------------- |
+| Not be empty          | `Sitemap URL cannot be empty`           |
+| Be a valid URL        | `Invalid sitemap URL format`            |
+| Use `http` or `https` | `Sitemap URL must use HTTP(S) protocol` |
+| End with `.xml`       | `Sitemap URL must be in .xml format`    |
 
 ### Crawl delay validation
 
