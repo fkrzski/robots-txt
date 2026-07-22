@@ -7,7 +7,7 @@
 
 # Export-ignore settings
 /art                export-ignore
-/docs              export-ignore
+/docs               export-ignore
 /tests              export-ignore
 /.github            export-ignore
 .editorconfig       export-ignore
