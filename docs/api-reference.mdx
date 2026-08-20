@@ -283,7 +283,8 @@ Applies to `crawlDelay()`. The value must be non-negative, otherwise it throws
 ```php
 use Fkrzski\RobotsTxt\RobotsTxt;
 
-(new RobotsTxt())->disallow('admin');   // InvalidArgumentException: Path must start with forward slash (/)
-(new RobotsTxt())->sitemap('/site.xml'); // InvalidArgumentException: Sitemap URL must use HTTP(S) protocol
-(new RobotsTxt())->crawlDelay(-1);       // InvalidArgumentException: Crawl delay cannot be negative
+(new RobotsTxt())->disallow('admin');                    // Path must start with forward slash (/)
+(new RobotsTxt())->sitemap('/sitemap.xml');              // Invalid sitemap URL format
+(new RobotsTxt())->sitemap('ftp://example.com/map.xml'); // Sitemap URL must use HTTP(S) protocol
+(new RobotsTxt())->crawlDelay(-1);                       // Crawl delay cannot be negative
 ```
