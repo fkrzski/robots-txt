@@ -1,0 +1,74 @@
+---
+title: robots-txt
+description: A modern, fluent PHP package for building valid robots.txt files with type-safe crawlers and fail-fast validation.
+repository: https://github.com/fkrzski/robots-txt
+packagist: fkrzski/robots-txt
+status: stable
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+A modern, fluent PHP package for building `robots.txt` files.
+
+## Why robots-txt
+
+- **Fluent & chainable** — every method returns the builder, so a policy reads
+  top to bottom.
+- **Type-safe crawlers** — target bots through `CrawlerEnum` instead of
+  hand-writing user-agent strings.
+- **Validated by design** — paths, sitemap URLs, and crawl delays are checked as
+  you build, never at render time.
+- **Zero runtime dependencies** — one small package, nothing to pull in.
+
+## Requirements
+
+- PHP 8.4 or higher
+- A code coverage driver (development only)
+
+## Installation
+
+```bash
+composer require fkrzski/robots-txt
+```
+
+## Quick start
+
+<Steps>
+
+1. Build a policy:
+
+   ```php
+   use Fkrzski\RobotsTxt\RobotsTxt;
+
+   $robots = (new RobotsTxt())
+       ->disallow('/admin')
+       ->allow('/public')
+       ->crawlDelay(5);
+   ```
+
+2. Render it:
+
+   ```php
+   echo $robots->toString();
+   ```
+
+   ```text title="robots.txt"
+   User-agent: *
+   Disallow: /admin
+   Allow: /public
+   Crawl-delay: 5
+   ```
+
+3. Or write it straight to disk:
+
+   ```php
+   $robots->toFile(); // ./robots.txt
+   ```
+
+</Steps>
+
+<Aside type="tip" title="Rules start out global">
+  Rules added before the first `userAgent()` call render under `User-agent: *`.
+  [Global vs crawler context](/robots-txt/guide#global-vs-crawler-context) covers
+  scoping them to a single bot.
+</Aside>

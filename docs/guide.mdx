@@ -1,0 +1,379 @@
+---
+title: Guide
+description: How the RobotsTxt builder composes global and crawler-specific rules, orders its output, and writes or serves robots.txt files.
+---
+
+import { Aside, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Global vs crawler context
+
+The builder tracks a *current context*. Until you call `userAgent()`, every rule
+you add is **global** and renders under `User-agent: *`:
+
+```php
+use Fkrzski\RobotsTxt\RobotsTxt;
+
+$robots = new RobotsTxt();
+
+echo $robots
+    ->disallow('/admin')
+    ->allow('/public')
+    ->toString();
+```
+
+```text title="robots.txt"
+User-agent: *
+Disallow: /admin
+Allow: /public
+```
+
+Calling `userAgent()` switches the context: every rule after it belongs to that
+crawler until you switch again.
+
+```php {5,7}
+use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
+
+echo $robots
+    ->disallow('/admin')              // global
+    ->userAgent(CrawlerEnum::GOOGLE)
+    ->disallow('/google-only')        // Googlebot
+    ->userAgent(CrawlerEnum::BING)
+    ->disallow('/bing-only')          // Bingbot
+    ->toString();
+```
+
+```text title="robots.txt"
+User-agent: *
+Disallow: /admin
+
+User-agent: Googlebot
+Disallow: /google-only
+
+User-agent: Bingbot
+Disallow: /bing-only
+```
+
+## userAgent() vs forUserAgent()
+
+`userAgent()` sets the context and leaves it set — every following rule sticks to
+that crawler. `forUserAgent()` scopes a group of rules to a crawler inside a
+closure, then restores the previous context when the closure returns.
+
+The same policy, written both ways:
+
+<Tabs syncKey="robots-context-style">
+  <TabItem label="userAgent()">
+    ```php
+    $robots
+        ->disallow('/admin')
+        ->userAgent(CrawlerEnum::GOOGLE)
+        ->disallow('/private')
+        ->crawlDelay(10);
+    ```
+
+  </TabItem>
+  <TabItem label="forUserAgent()">
+    ```php
+    $robots
+        ->disallow('/admin')
+        ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
+            $robots
+                ->disallow('/private')
+                ->crawlDelay(10);
+        });
+    ```
+
+  </TabItem>
+</Tabs>
+
+Both render the same file:
+
+```text title="robots.txt"
+User-agent: *
+Disallow: /admin
+
+User-agent: Googlebot
+Disallow: /private
+Crawl-delay: 10
+```
+
+The difference shows up on the next call. Append `allow('/public')` to each chain
+and they diverge:
+
+<Tabs syncKey="robots-context-style">
+  <TabItem label="userAgent()">
+    ```php {6}
+    $robots
+        ->disallow('/admin')
+        ->userAgent(CrawlerEnum::GOOGLE)
+        ->disallow('/private')
+        ->crawlDelay(10)
+        ->allow('/public');   // still Googlebot — the context stayed set
+    ```
+
+    ```text title="robots.txt"
+    User-agent: *
+    Disallow: /admin
+
+    User-agent: Googlebot
+    Disallow: /private
+    Crawl-delay: 10
+    Allow: /public
+    ```
+
+  </TabItem>
+  <TabItem label="forUserAgent()">
+    ```php {8}
+    $robots
+        ->disallow('/admin')
+        ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
+            $robots
+                ->disallow('/private')
+                ->crawlDelay(10);
+        })
+        ->allow('/public');   // back to global — the context was restored
+    ```
+
+    ```text title="robots.txt"
+    User-agent: *
+    Disallow: /admin
+    Allow: /public
+
+    User-agent: Googlebot
+    Disallow: /private
+    Crawl-delay: 10
+    ```
+
+  </TabItem>
+</Tabs>
+
+<Aside type="tip">
+  Use `forUserAgent()` for a self-contained block of rules, `userAgent()` when the
+  rest of the chain belongs to that crawler.
+</Aside>
+
+## Output ordering
+
+`toString()` always emits sections in a fixed order, regardless of the order you
+called the methods:
+
+1. Global rules (under `User-agent: *`), if any
+2. Each crawler block, in the order its crawler was first referenced
+3. All sitemaps, last
+
+Blocks are separated by a blank line. Note the two sitemaps added at opposite
+ends of the chain:
+
+```php {5,16}
+$robots = new RobotsTxt();
+
+echo $robots
+    ->disallow('/admin')
+    ->sitemap('https://example.com/sitemap1.xml')
+    ->forUserAgent(CrawlerEnum::GOOGLE, function (RobotsTxt $robots): void {
+        $robots
+            ->disallow('/google-private')
+            ->allow('/public/*');
+    })
+    ->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robots): void {
+        $robots
+            ->disallow('/bing-private')
+            ->crawlDelay(5);
+    })
+    ->sitemap('https://example.com/sitemap2.xml')
+    ->toString();
+```
+
+```text title="robots.txt" {12,13}
+User-agent: *
+Disallow: /admin
+
+User-agent: Googlebot
+Disallow: /google-private
+Allow: /public/*
+
+User-agent: Bingbot
+Disallow: /bing-private
+Crawl-delay: 5
+
+Sitemap: https://example.com/sitemap1.xml
+Sitemap: https://example.com/sitemap2.xml
+```
+
+<Aside>
+  A builder with no rules renders an empty string, never a bare `User-agent: *`
+  header with nothing under it.
+</Aside>
+
+## Writing to disk
+
+`toFile()` renders the content and writes it to a file. With no argument it writes
+`robots.txt` to the current working directory:
+
+```php
+$robots->toFile();                           // ./robots.txt
+$robots->toFile('/var/www/html/robots.txt'); // custom path
+```
+
+It returns `true` on success and throws a `RuntimeException` when the target
+directory does not exist, or the directory or an existing file is not writable.
+
+The file has to land in the document root, so the path depends on your stack:
+
+<Tabs syncKey="php-framework">
+  <TabItem label="Laravel">
+    ```php
+    $robots->toFile(public_path('robots.txt'));
+    ```
+
+  </TabItem>
+  <TabItem label="Symfony">
+    ```php
+    $robots->toFile($this->getParameter('kernel.project_dir').'/public/robots.txt');
+    ```
+
+  </TabItem>
+  <TabItem label="Plain PHP">
+    ```php
+    $robots->toFile(__DIR__.'/public/robots.txt');
+    ```
+
+  </TabItem>
+</Tabs>
+
+<FileTree>
+
+- public
+  - **robots.txt** written by `toFile()`
+  - index.php
+- src/
+- composer.json
+
+</FileTree>
+
+## Serving it dynamically
+
+The policy can also be rendered per request — useful when it depends on the
+environment:
+
+<Tabs syncKey="php-framework">
+  <TabItem label="Laravel">
+    ```php title="routes/web.php"
+    use Fkrzski\RobotsTxt\RobotsTxt;
+
+    Route::get('/robots.txt', function () {
+        $robots = new RobotsTxt();
+
+        if (app()->isProduction()) {
+            $robots->disallow('/admin')->sitemap(url('/sitemap.xml'));
+        } else {
+            $robots->disallowAll();
+        }
+
+        return response($robots->toString(), 200, ['Content-Type' => 'text/plain']);
+    });
+    ```
+
+  </TabItem>
+  <TabItem label="Symfony">
+    ```php title="src/Controller/RobotsController.php"
+    use Fkrzski\RobotsTxt\RobotsTxt;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\Routing\Attribute\Route;
+
+    final class RobotsController
+    {
+        #[Route('/robots.txt', name: 'robots')]
+        public function __invoke(): Response
+        {
+            $robots = (new RobotsTxt())
+                ->disallow('/admin')
+                ->sitemap('https://example.com/sitemap.xml');
+
+            return new Response($robots->toString(), 200, ['Content-Type' => 'text/plain']);
+        }
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Plain PHP">
+    ```php title="public/robots.php"
+    <?php
+
+    use Fkrzski\RobotsTxt\RobotsTxt;
+
+    require __DIR__.'/../vendor/autoload.php';
+
+    header('Content-Type: text/plain');
+
+    echo (new RobotsTxt())
+        ->disallow('/admin')
+        ->sitemap('https://example.com/sitemap.xml')
+        ->toString();
+    ```
+
+  </TabItem>
+</Tabs>
+
+<Aside type="caution">
+  A static `robots.txt` in the document root wins — the web server serves it
+  before PHP runs. Pick one or the other.
+</Aside>
+
+## Testing
+
+The builder does no I/O beyond `toFile()`, so there is nothing to fake — assert on
+the rendered string:
+
+<Tabs syncKey="php-test-runner">
+  <TabItem label="Pest">
+    ```php
+    it('blocks the admin panel', function (): void {
+        $robots = (new RobotsTxt())->disallow('/admin')->allow('/public');
+
+        expect($robots->toString())->toBe(<<<'TXT'
+            User-agent: *
+            Disallow: /admin
+            Allow: /public
+            TXT);
+    });
+    ```
+
+  </TabItem>
+  <TabItem label="PHPUnit">
+    ```php
+    public function test_it_blocks_the_admin_panel(): void
+    {
+        $robots = (new RobotsTxt())->disallow('/admin')->allow('/public');
+
+        $this->assertSame(<<<'TXT'
+            User-agent: *
+            Disallow: /admin
+            Allow: /public
+            TXT, $robots->toString());
+    }
+    ```
+
+  </TabItem>
+</Tabs>
+
+<Aside type="caution" title="No trailing newline">
+  `toString()` trims its output, so a heredoc or fixture file that ends with a
+  newline never matches.
+</Aside>
+
+Covering `toFile()` means handing it a path. Without one it resolves to
+`getcwd()` — under a test runner that is the project root, so the suite drops a
+stray `robots.txt` there, or overwrites a real one:
+
+```php
+$path = sys_get_temp_dir().'/robots-'.uniqid().'.txt';
+
+$robots->toFile($path); // never a bare toFile() in a test
+```
+
+<Aside type="caution">
+  Assert on the file's contents rather than on the return value: an empty policy
+  writes a 0-byte file and still reports `false`, because `file_put_contents()`
+  counts bytes written.
+</Aside>

@@ -3,6 +3,8 @@ title: Crawlers
 description: Every crawler in CrawlerEnum mapped to its official user-agent string, grouped by search engines, social platforms, SEO tools, and more.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 `CrawlerEnum` maps each supported crawler to its official user-agent string. Pass a
 case to `userAgent()` or `forUserAgent()` instead of typing the string by hand — a
 typo becomes a compile-time error rather than a silently ignored rule.
@@ -17,12 +19,43 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: Googlebot
 Disallow: /private
 ```
 
 The rendered `User-agent:` line is the enum's backing value, listed below.
+
+## Blocking a group of crawlers
+
+Cases are ordinary enum values, so a group of bots can share one policy by looping
+over them:
+
+```php
+use Fkrzski\RobotsTxt\RobotsTxt;
+use Fkrzski\RobotsTxt\Enums\CrawlerEnum;
+
+$robots = new RobotsTxt();
+
+foreach ([CrawlerEnum::AHREFS, CrawlerEnum::SEMRUSH, CrawlerEnum::MAJESTIC] as $crawler) {
+    $robots->forUserAgent($crawler, function (RobotsTxt $robots): void {
+        $robots->disallowAll();
+    });
+}
+
+echo $robots->toString();
+```
+
+```text title="robots.txt"
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+```
 
 ## Search engines
 
@@ -102,3 +135,8 @@ The rendered `User-agent:` line is the enum's backing value, listed below.
 | `CrawlerEnum::W3C_VALIDATOR`  | `W3C-checklink`     |
 | `CrawlerEnum::CSS_VALIDATOR`  | `W3C_CSS_Validator` |
 | `CrawlerEnum::HTML_VALIDATOR` | `W3C_Validator`     |
+
+<Aside type="tip" title="Missing a crawler?">
+  [Open an issue](https://github.com/fkrzski/robots-txt/issues) with a link to
+  its official user-agent documentation.
+</Aside>
