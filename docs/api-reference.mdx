@@ -3,15 +3,19 @@ title: API reference
 description: Complete method reference for the RobotsTxt builder — signatures, validation rules, and verified output for every call.
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 Every public method of `RobotsTxt`, with its signature, behavior, and the exact
 output it produces. All methods return the builder for chaining, except `toFile()`
 (returns `bool`) and `toString()` (returns `string`).
 
 ## allow()
 
-```text
+```php frame="none"
 allow(string $path): self
 ```
+
+<Badge text="throws InvalidArgumentException" variant="danger" size="small" />
 
 Adds an `Allow` rule for `$path` to the current context.
 
@@ -21,16 +25,18 @@ use Fkrzski\RobotsTxt\RobotsTxt;
 echo (new RobotsTxt())->allow('/public')->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Allow: /public
 ```
 
 ## disallow()
 
-```text
+```php frame="none"
 disallow(string $path): self
 ```
+
+<Badge text="throws InvalidArgumentException" variant="danger" size="small" />
 
 Adds a `Disallow` rule for `$path` to the current context. Same path rules as
 `allow()` (see [Path validation](#path-validation)).
@@ -39,16 +45,18 @@ Adds a `Disallow` rule for `$path` to the current context. Same path rules as
 echo (new RobotsTxt())->disallow('/private')->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Disallow: /private
 ```
 
 ## crawlDelay()
 
-```text
+```php frame="none"
 crawlDelay(int $seconds): self
 ```
+
+<Badge text="throws InvalidArgumentException" variant="danger" size="small" />
 
 Adds a `Crawl-delay` rule to the current context. `$seconds` must be non-negative.
 
@@ -56,14 +64,14 @@ Adds a `Crawl-delay` rule to the current context. `$seconds` must be non-negativ
 echo (new RobotsTxt())->crawlDelay(10)->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Crawl-delay: 10
 ```
 
 ## userAgent()
 
-```text
+```php frame="none"
 userAgent(CrawlerEnum $crawler): self
 ```
 
@@ -81,7 +89,7 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: Googlebot
 Disallow: /private
 Allow: /public
@@ -89,7 +97,7 @@ Allow: /public
 
 ## forUserAgent()
 
-```text
+```php frame="none"
 forUserAgent(CrawlerEnum $crawler, Closure(RobotsTxt): void $rules): self
 ```
 
@@ -108,7 +116,7 @@ $robots->forUserAgent(CrawlerEnum::BING, function (RobotsTxt $robots): void {
 echo $robots->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: Bingbot
 Disallow: /bing-private
 Crawl-delay: 10
@@ -116,9 +124,11 @@ Crawl-delay: 10
 
 ## sitemap()
 
-```text
+```php frame="none"
 sitemap(string $url): self
 ```
+
+<Badge text="throws InvalidArgumentException" variant="danger" size="small" />
 
 Adds a sitemap. Sitemaps are context-independent — they always render together in
 the trailing section, in insertion order (see [Sitemap validation](#sitemap-validation)).
@@ -129,13 +139,13 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 Sitemap: https://example.com/sitemap.xml
 ```
 
 ## disallowAll()
 
-```text
+```php frame="none"
 disallowAll(bool $disallow = true): self
 ```
 
@@ -146,7 +156,7 @@ Blocks the entire current context. When `$disallow` is `true` (the default) it
 
 Applied globally, it wipes the previously chained rules:
 
-```php
+```php del={2,3}
 echo (new RobotsTxt())
     ->allow('/public')   // cleared
     ->disallow('/admin') // cleared
@@ -154,7 +164,7 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Disallow: /
 ```
@@ -162,7 +172,7 @@ Disallow: /
 Applied inside a crawler context, it only clears that crawler — global rules and
 other crawlers survive:
 
-```php
+```php del={4,5}
 echo (new RobotsTxt())
     ->disallow('/admin')                  // global — kept
     ->userAgent(CrawlerEnum::GOOGLE)
@@ -174,7 +184,7 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Disallow: /admin
 
@@ -187,7 +197,7 @@ Disallow: /secret
 
 ## toString()
 
-```text
+```php frame="none"
 toString(): string
 ```
 
@@ -197,9 +207,11 @@ have been added.
 
 ## toFile()
 
-```text
+```php frame="none"
 toFile(?string $path = null): bool
 ```
+
+<Badge text="throws RuntimeException" variant="danger" size="small" />
 
 Writes the rendered content to a file and returns `true` on success. With no
 argument it writes `robots.txt` to the current working directory.
@@ -227,7 +239,7 @@ echo (new RobotsTxt())
     ->toString();
 ```
 
-```text
+```text title="robots.txt"
 User-agent: *
 Disallow: /*.php
 Allow: /public/*
