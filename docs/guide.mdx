@@ -319,3 +319,61 @@ environment:
   A static `robots.txt` in the document root wins — the web server serves it
   before PHP runs. Pick one or the other.
 </Aside>
+
+## Testing
+
+The builder does no I/O beyond `toFile()`, so there is nothing to fake — assert on
+the rendered string:
+
+<Tabs syncKey="php-test-runner">
+  <TabItem label="Pest">
+    ```php
+    it('blocks the admin panel', function (): void {
+        $robots = (new RobotsTxt())->disallow('/admin')->allow('/public');
+
+        expect($robots->toString())->toBe(<<<'TXT'
+            User-agent: *
+            Disallow: /admin
+            Allow: /public
+            TXT);
+    });
+    ```
+
+  </TabItem>
+  <TabItem label="PHPUnit">
+    ```php
+    public function test_it_blocks_the_admin_panel(): void
+    {
+        $robots = (new RobotsTxt())->disallow('/admin')->allow('/public');
+
+        $this->assertSame(<<<'TXT'
+            User-agent: *
+            Disallow: /admin
+            Allow: /public
+            TXT, $robots->toString());
+    }
+    ```
+
+  </TabItem>
+</Tabs>
+
+<Aside type="caution" title="No trailing newline">
+  `toString()` trims its output, so a heredoc or fixture file that ends with a
+  newline never matches.
+</Aside>
+
+Covering `toFile()` means handing it a path. Without one it resolves to
+`getcwd()` — under a test runner that is the project root, so the suite drops a
+stray `robots.txt` there, or overwrites a real one:
+
+```php
+$path = sys_get_temp_dir().'/robots-'.uniqid().'.txt';
+
+$robots->toFile($path); // never a bare toFile() in a test
+```
+
+<Aside type="caution">
+  Assert on the file's contents rather than on the return value: an empty policy
+  writes a 0-byte file and still reports `false`, because `file_put_contents()`
+  counts bytes written.
+</Aside>
