@@ -14,6 +14,9 @@ A modern, fluent PHP package for building valid `robots.txt` files with type-saf
 crawlers and fail-fast validation. Invalid paths, sitemap URLs, or crawl delays
 throw a clear exception as you build — never a broken file at render time.
 
+It powers the [`robots.txt`](https://deadbystats.eu/robots.txt) on
+[Dead by Stats](https://deadbystats.eu).
+
 ## Requirements
 
 - PHP 8.4 or higher
