@@ -36,4 +36,4 @@ jobs:
     # Validates docs/ frontmatter, markdownlint rules and internal links against
     # the shared contract. Pull the pin to @latest to always track the schema.
     - name: Validate docs
-      run: npx --yes @fkrzski/docs-schema@0.1.0 docs
+      run: npx --yes @fkrzski/docs-schema@0.2.0 docs
