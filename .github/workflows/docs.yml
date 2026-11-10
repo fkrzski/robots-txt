@@ -35,8 +35,9 @@ jobs:
       with:
         node-version: 24
 
-    # Validates docs/ frontmatter, markdownlint rules and internal links, and
-    # CHANGELOG.md against Keep a Changelog, all against the shared contract.
-    # Pull the pin to @latest to always track the schema.
+    # Validates docs/ frontmatter, markdownlint rules, internal links, allowed
+    # MDX components and _meta.json, and CHANGELOG.md against Keep a Changelog,
+    # all against the shared contract. Pull the pin to @latest to always track
+    # the schema.
     - name: Validate docs
-      run: npx --yes @fkrzski/docs-schema@0.3.0 docs
+      run: npx --yes @fkrzski/docs-schema@0.5.0 docs
