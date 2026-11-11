@@ -2,6 +2,10 @@ name: Docs
 
 on:
   workflow_dispatch:
+  release:
+    types: [
+      "published"
+    ]
   pull_request:
     branches: [
       "master"
@@ -35,8 +39,25 @@ jobs:
       with:
         node-version: 24
 
-    # Validates docs/ frontmatter, markdownlint rules and internal links, and
-    # CHANGELOG.md against Keep a Changelog, all against the shared contract.
-    # Pull the pin to @latest to always track the schema.
+    # Validates docs/ frontmatter, markdownlint rules, internal links, allowed
+    # MDX components and _meta.json, and CHANGELOG.md against Keep a Changelog,
+    # all against the shared contract. Pull the pin to @latest to always track
+    # the schema.
     - name: Validate docs
-      run: npx --yes @fkrzski/docs-schema@0.3.0 docs
+      run: npx --yes @fkrzski/docs-schema@0.5.0 docs
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'release'
+
+    name: Trigger docs deploy
+
+    steps:
+
+    # The docs site rebuilds every project's docs/ afresh, so a release only has
+    # to signal it; the hook URL is a secret, one per project.
+    - name: Trigger docs deploy
+      env:
+        DOCS_DEPLOY_HOOK: ${{ secrets.DOCS_DEPLOY_HOOK }}
+      run: curl -fsS -X POST "$DOCS_DEPLOY_HOOK"
