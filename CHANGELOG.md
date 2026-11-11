@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.3] - 2026-11-11
+
+### Changed
+
+- The sidebar on [docs.fkrzski.dev/robots-txt](https://docs.fkrzski.dev/robots-txt) puts the guide ahead of the crawler list, so the overview comes before the reference.
+- Publishing a release rebuilds the docs site, so a documentation change goes live with the release that carries it instead of waiting for the next build.
+
 ## [2.1.2] - 2026-10-15
 
 ### Added
@@ -67,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Path`, `CrawlDelay`, `Sitemap`, `UserAgent` and `Rule` value objects behind the `ValueObject` contract, each validating on construction and throwing `InvalidArgumentException` on a path that does not start with `/`, a negative delay, or a sitemap URL that is not an HTTP(S) `.xml`.
 - Support for PHP 8.2 and higher.
 
-[Unreleased]: https://github.com/fkrzski/robots-txt/compare/2.1.2...HEAD
+[Unreleased]: https://github.com/fkrzski/robots-txt/compare/2.1.3...HEAD
+[2.1.3]: https://github.com/fkrzski/robots-txt/compare/2.1.2...2.1.3
 [2.1.2]: https://github.com/fkrzski/robots-txt/compare/2.1.1...2.1.2
 [2.1.1]: https://github.com/fkrzski/robots-txt/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/fkrzski/robots-txt/compare/2.0.1...2.1.0
