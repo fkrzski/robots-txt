@@ -35,8 +35,8 @@
     },
     "require-dev": {
         "laravel/pint": "^v1.7",
-        "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-type-coverage": "^4.0",
+        "pestphp/pest": "^5.0.4",
+        "pestphp/pest-plugin-type-coverage": "^5.0",
         "phpstan/phpstan": "^2.0",
         "rector/rector": "^2.1.2"
     },
