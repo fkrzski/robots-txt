@@ -414,7 +414,8 @@ test('disallowAll with false parameter does nothing', function (): void {
 });
 
 test('toFile saves robots.txt content to default location', function (): void {
-    $tempDir = sys_get_temp_dir();
+    $tempDir = sys_get_temp_dir().'/robots_test_'.uniqid();
+    mkdir($tempDir);
     $originalCwd = getcwd();
 
     try {
@@ -430,10 +431,14 @@ test('toFile saves robots.txt content to default location', function (): void {
         expect($result)->toBeTrue()
             ->and(file_exists($tempDir.'/robots.txt'))->toBeTrue()
             ->and(file_get_contents($tempDir.'/robots.txt'))->toBe($robots->toString());
-
-        unlink($tempDir.'/robots.txt');
     } finally {
         chdir($originalCwd);
+
+        if (file_exists($tempDir.'/robots.txt')) {
+            unlink($tempDir.'/robots.txt');
+        }
+
+        rmdir($tempDir);
     }
 });
 
