@@ -60,7 +60,7 @@
         "test:syntax": "find . -path ./vendor -prune -o -type f -name \\\"*.php\\\" -print | xargs -P 2 -n 1 php -l",
         "test:type-coverage": "pest --type-coverage --exactly=100 --compact",
         "test:unit": "pest --parallel --coverage --exactly=100",
-        "test:unit:mutation": "pest --parallel --mutate --exactly=100",
+        "test:unit:mutation": "pest --parallel --mutate --min=100",
         "test": [
             "@test:profanity",
             "@test:syntax",
