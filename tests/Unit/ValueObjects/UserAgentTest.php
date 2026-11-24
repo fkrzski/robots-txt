@@ -36,3 +36,9 @@ test('user agents with same crawler are equal', function (): void {
         ->and($agent1->equals($agent3))->toBeFalse()
         ->and($agent2->equals($agent3))->toBeFalse();
 });
+
+test('user agent validation accepts every crawler', function (): void {
+    foreach (CrawlerEnum::cases() as $case) {
+        expect(new UserAgent($case)->validate(...))->not->toThrow(Throwable::class);
+    }
+});
