@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Fkrzski\RobotsTxt\Contracts\ValueObject;
 use Fkrzski\RobotsTxt\Enums\DirectiveEnum;
 use Fkrzski\RobotsTxt\ValueObjects\CrawlDelay;
 use Fkrzski\RobotsTxt\ValueObjects\Path;
@@ -50,4 +51,34 @@ test('rules with different directives are not equal', function (): void {
     expect($rule1->equals($rule2))->toBeTrue()
         ->and($rule1->equals($rule3))->toBeFalse()
         ->and($rule2->equals($rule3))->toBeFalse();
+});
+
+test('validate delegates to the value object', function (): void {
+    $valueObject = new class implements ValueObject
+    {
+        public function value(): string
+        {
+            return '/path';
+        }
+
+        public function toString(): string
+        {
+            return '/path';
+        }
+
+        public function equals(ValueObject $valueObject): bool
+        {
+            return $this->value() === $valueObject->value();
+        }
+
+        public function validate(): void
+        {
+            throw new InvalidArgumentException('Value object is invalid');
+        }
+    };
+
+    $rule = new Rule(DirectiveEnum::ALLOW, $valueObject);
+
+    expect($rule->validate(...))
+        ->toThrow(InvalidArgumentException::class, 'Value object is invalid');
 });
