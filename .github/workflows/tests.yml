@@ -52,7 +52,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.4, 8.5, 8.6]
+        php: [8.5, 8.6]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
           # Neither pcov nor Xdebug builds on PHP 8.6 yet.
