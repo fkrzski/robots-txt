@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-24
+
 ### Added
 
 - PHP 8.6 support.
@@ -82,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Path`, `CrawlDelay`, `Sitemap`, `UserAgent` and `Rule` value objects behind the `ValueObject` contract, each validating on construction and throwing `InvalidArgumentException` on a path that does not start with `/`, a negative delay, or a sitemap URL that is not an HTTP(S) `.xml`.
 - Support for PHP 8.2 and higher.
 
-[Unreleased]: https://github.com/fkrzski/robots-txt/compare/2.1.3...HEAD
+[Unreleased]: https://github.com/fkrzski/robots-txt/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/fkrzski/robots-txt/compare/2.1.3...3.0.0
 [2.1.3]: https://github.com/fkrzski/robots-txt/compare/2.1.2...2.1.3
 [2.1.2]: https://github.com/fkrzski/robots-txt/compare/2.1.1...2.1.2
 [2.1.1]: https://github.com/fkrzski/robots-txt/compare/2.1.0...2.1.1
