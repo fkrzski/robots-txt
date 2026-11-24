@@ -91,6 +91,10 @@ jobs:
     - name: Check syntax
       run: composer test:syntax
 
+    - name: Check coverage
+      if: ${{ matrix.coverage != 'none' }}
+      run: composer test:unit
+
     - name: Run tests
       if: ${{ matrix.coverage != 'none' }}
       run: composer test:unit:mutation
