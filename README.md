@@ -19,7 +19,7 @@ It powers the [`robots.txt`](https://deadbystats.eu/robots.txt) on
 
 ## Requirements
 
-- PHP 8.4 or higher
+- PHP 8.5 or higher
 - A code coverage driver (development only)
 
 ## Installation
