@@ -52,8 +52,12 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.4, 8.5]
+        php: [8.4, 8.5, 8.6]
         dependency-version: [prefer-lowest, prefer-stable]
+        include:
+          # Neither pcov nor Xdebug builds on PHP 8.6 yet.
+          - php: 8.6
+            coverage: none
 
     name: Tests P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
@@ -67,7 +71,7 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         extensions: dom, mbstring, zip
-        coverage: pcov
+        coverage: ${{ matrix.coverage || 'pcov' }}
 
     - name: Get Composer cache directory
       id: composer-cache
@@ -88,4 +92,9 @@ jobs:
       run: composer test:syntax
 
     - name: Run tests
+      if: ${{ matrix.coverage != 'none' }}
       run: composer test:unit:mutation
+
+    - name: Run tests without coverage
+      if: ${{ matrix.coverage == 'none' }}
+      run: vendor/bin/pest --parallel
