@@ -58,7 +58,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.4]
+        php: [8.5]
         dependency-version: [prefer-stable]
 
     name: Code analysis P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
